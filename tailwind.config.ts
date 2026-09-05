@@ -9,7 +9,7 @@ const config: Config = {
     extend: {
       colors: {
         ink: {
-          DEFAULT: "#0B0E12",
+          DEFAULT: "#081818",
           panel: "#161A20",
           line: "#262C34",
         },
