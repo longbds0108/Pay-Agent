@@ -36,62 +36,62 @@ const LEDGER_ENTRIES: { time: string; state: string; amount: string; status: Sta
   { time: "10:42:03", state: "approved", amount: "auto", status: "confirmed", badge: "auto" },
   { time: "10:42:04", state: "executing", amount: "0.50 USDC", status: "neutral", badge: "arc" },
   { time: "10:42:06", state: "confirmed", amount: "0.50 USDC", status: "confirmed", badge: "done" },
-  { time: "10:44:11", state: "pending_user_approval", amount: "0.25 USDC", status: "pending", badge: "cần bạn" },
-  { time: "10:44:52", state: "approved", amount: "bởi bạn", status: "confirmed", badge: "ok" },
+  { time: "10:44:11", state: "pending_user_approval", amount: "0.25 USDC", status: "pending", badge: "needs you" },
+  { time: "10:44:52", state: "approved", amount: "by you", status: "confirmed", badge: "ok" },
   { time: "10:47:20", state: "policy_check", amount: "12.00 USDC", status: "neutral", badge: "checking" },
-  { time: "10:47:20", state: "rejected", amount: "vượt hạn mức", status: "denied", badge: "denied" },
+  { time: "10:47:20", state: "rejected", amount: "over limit", status: "denied", badge: "denied" },
 ];
 
 const POLICY_CARDS = [
   {
-    label: "Hạn mức / ngày",
+    label: "Daily limit",
     value: "50",
-    hint: "Tổng chi tối đa mỗi ngày, tính bằng USDC.",
+    hint: "Maximum total spend per day, in USDC.",
   },
   {
-    label: "Hạn mức / giao dịch",
+    label: "Per-transaction limit",
     value: "5",
-    hint: "Một lần thanh toán không được vượt quá số này.",
+    hint: "A single payment can never exceed this amount.",
   },
   {
-    label: "Cần duyệt trên",
+    label: "Approval required above",
     value: "5",
-    hint: "Vượt ngưỡng này, agent dừng lại chờ bạn bấm Approve.",
+    hint: "Past this threshold, the agent pauses and waits for your approval.",
   },
 ];
 
 const PIPELINE_STEPS: { state: string; status: Status; text: string }[] = [
-  { state: "created", status: "neutral", text: "Agent hiểu yêu cầu trong đoạn chat và tạo đề xuất thanh toán." },
+  { state: "created", status: "neutral", text: "The agent reads your request in chat and drafts a payment proposal." },
   {
     state: "policy_check",
     status: "neutral",
-    text: "Đối chiếu số tiền với hạn mức ngày, hạn mức/giao dịch và ngưỡng cần duyệt.",
+    text: "Checks the amount against your daily limit, per-transaction limit, and approval threshold.",
   },
   {
     state: "approved → executing",
     status: "confirmed",
-    text: "Trong hạn mức: tự động duyệt và gửi USDC ngay, không cần chờ bạn.",
+    text: "Within limits: auto-approved and sent right away — no need to wait for you.",
   },
   {
     state: "pending_user_approval",
     status: "pending",
-    text: "Vượt ngưỡng duyệt: agent dừng lại, hiện nút Approve / Reject cho bạn.",
+    text: "Over the approval threshold: the agent pauses and shows you Approve / Reject.",
   },
   {
     state: "rejected",
     status: "denied",
-    text: "Vượt hạn mức ngày hoặc giao dịch: từ chối ngay, không thực thi.",
+    text: "Over the daily or per-transaction limit: rejected immediately, never executed.",
   },
   {
     state: "confirmed / failed",
     status: "neutral",
-    text: "Ghi vào lịch sử giao dịch kèm mã tx thật trên Arcscan.",
+    text: "Logged to transaction history with a real tx hash on Arcscan.",
   },
 ];
 
 const ARC_SPECS = [
   { label: "chain_id", value: "5042002" },
-  { label: "gas_token", value: "USDC — không cần token riêng để trả phí" },
+  { label: "gas_token", value: "USDC — no separate token needed for gas" },
   { label: "network", value: "testnet" },
   { label: "wallet_custody", value: "Circle Developer-Controlled Wallets (SCA)" },
   { label: "explorer", value: "testnet.arcscan.app" },
@@ -111,7 +111,7 @@ export default function HomePage() {
           href="/login"
           className={`rounded-full border border-ink-line px-4 py-2 text-sm text-paper/80 transition hover:border-paper/40 hover:text-paper ${linkFocus}`}
         >
-          Continue with Google
+          Get started
         </Link>
       </header>
 
@@ -119,29 +119,29 @@ export default function HomePage() {
       <section className="mx-auto grid max-w-6xl gap-12 px-6 pb-20 pt-8 md:grid-cols-[1.1fr_1fr] md:gap-10 md:px-10 md:pt-16">
         <div>
           <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-ink-line px-3 py-1 text-xs uppercase tracking-[0.16em] text-paper/60">
-            Ví agent trên Arc <span className="text-confirmed">·</span> USDC là phí gas
+            Agent wallet on Arc <span className="text-confirmed">·</span> USDC pays the gas
           </p>
           <h1 className="text-4xl font-semibold leading-[1.08] tracking-tight text-paper sm:text-5xl lg:text-[3.4rem]">
-            Giao ngân sách cho agent,
-            <br className="hidden sm:block" /> đừng giao chìa khoá.
+            Give your agent a budget,
+            <br className="hidden sm:block" /> not the keys.
           </h1>
           <p className="mt-6 max-w-md text-base leading-relaxed text-paper/70">
-            AgentPay tạo cho AI agent của bạn một ví riêng trên Arc, giới hạn
-            bởi hạn mức bạn tự đặt. Agent không bao giờ chi vượt quá — kể cả
-            khi bạn không có mặt để duyệt.
+            AgentPay gives your AI agent its own wallet on Arc, capped by
+            limits you set. It can never overspend — even when you&rsquo;re
+            not around to approve.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-5">
             <Link
               href="/login"
               className={`rounded-full bg-paper px-6 py-3 text-sm font-medium text-ink transition hover:bg-white active:scale-[0.97] ${linkFocus}`}
             >
-              Bắt đầu với Google
+              Continue with Google
             </Link>
             <a
               href="#pipeline"
               className={`text-sm text-paper/60 underline decoration-ink-line underline-offset-4 transition hover:text-paper ${linkFocus}`}
             >
-              Xem một khoản chi được duyệt thế nào ↓
+              See how a payment gets approved ↓
             </a>
           </div>
         </div>
@@ -150,7 +150,7 @@ export default function HomePage() {
           <div className="overflow-hidden rounded-2xl border border-ink-line bg-ink-panel">
             <div className="flex items-center justify-between border-b border-ink-line px-5 py-3">
               <span className="text-xs uppercase tracking-[0.12em] text-paper/50">
-                payment_intents — nhật ký
+                payment_intents — ledger
               </span>
               <span className="h-1.5 w-1.5 rounded-full bg-confirmed" />
             </div>
@@ -177,7 +177,7 @@ export default function HomePage() {
             </div>
           </div>
           <p className="mt-3 text-xs text-paper/40">
-            Ví dụ minh hoạ, đúng theo state machine thật trong{" "}
+            Illustrative example, matching the real state machine in{" "}
             <code className={plexMono.className}>types/index.ts</code>.
           </p>
         </div>
@@ -187,7 +187,7 @@ export default function HomePage() {
       <section className="bg-paper py-20 text-ink">
         <div className="mx-auto max-w-6xl px-6 md:px-10">
           <h2 className="text-xs uppercase tracking-[0.16em] text-ink/50">
-            Ba con số agent không thể vượt qua
+            Three numbers your agent can never cross
           </h2>
           <div className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-ink/10 bg-ink/10 sm:grid-cols-3">
             {POLICY_CARDS.map((card) => (
@@ -202,7 +202,7 @@ export default function HomePage() {
             ))}
           </div>
           <p className="mt-6 text-sm text-ink/50">
-            Giá trị mặc định — chỉnh lại bất kỳ lúc nào ở trang Policy sau khi đăng nhập.
+            Default values — change them anytime on the Policy page after signing in.
           </p>
         </div>
       </section>
@@ -210,7 +210,7 @@ export default function HomePage() {
       {/* State machine */}
       <section id="pipeline" className="mx-auto max-w-6xl px-6 py-20 md:px-10">
         <h2 className="text-xs uppercase tracking-[0.16em] text-paper/50">
-          Một khoản chi đi qua những bước nào
+          What a payment goes through
         </h2>
         <ol className="relative ml-3 mt-10 max-w-2xl space-y-10 border-l border-ink-line pl-8">
           {PIPELINE_STEPS.map((step) => (
@@ -228,7 +228,7 @@ export default function HomePage() {
       {/* Spec sheet Arc */}
       <section className="bg-paper py-20 text-ink">
         <div className="mx-auto max-w-6xl px-6 md:px-10">
-          <h2 className="text-xs uppercase tracking-[0.16em] text-ink/50">Thông số mạng Arc</h2>
+          <h2 className="text-xs uppercase tracking-[0.16em] text-ink/50">Arc network specs</h2>
           <dl className={`${plexMono.className} mt-8 max-w-2xl divide-y divide-ink/10 border-y border-ink/10 text-sm`}>
             {ARC_SPECS.map((spec) => (
               <div key={spec.label} className="flex flex-col gap-1 py-4 sm:flex-row sm:items-baseline sm:justify-between">
@@ -243,26 +243,26 @@ export default function HomePage() {
       {/* CTA cuối */}
       <section className="mx-auto max-w-6xl px-6 py-24 text-center md:px-10">
         <p className="text-2xl font-medium text-paper sm:text-3xl">
-          Agent của bạn đang chờ một ngân sách.
+          Your agent is waiting for a budget.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Link
             href="/login"
             className={`rounded-full bg-paper px-6 py-3 text-sm font-medium text-ink transition hover:bg-white active:scale-[0.97] ${linkFocus}`}
           >
-            Bắt đầu với Google
+            Continue with Google
           </Link>
           <Link
             href="/login"
             className={`rounded-full border border-ink-line px-6 py-3 text-sm text-paper/80 transition hover:border-paper/40 hover:text-paper ${linkFocus}`}
           >
-            Kết nối ví EVM
+            Connect EVM wallet
           </Link>
         </div>
       </section>
 
       <footer className="border-t border-ink-line px-6 py-8 text-center text-xs text-paper/35 md:px-10">
-        AgentPay — xây trên Arc.
+        AgentPay — built on Arc.
       </footer>
     </div>
   );
