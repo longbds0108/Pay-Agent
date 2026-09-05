@@ -106,10 +106,13 @@ export default function HomePage() {
     <div className={`${plexSans.className} min-h-screen bg-ink text-paper`}>
       <header className="sticky top-0 z-50 border-b border-ink/10 bg-paper/90 backdrop-blur-md">
         <div className="mx-auto grid max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-4 px-6 py-4 md:px-10">
-          <span className="flex items-center gap-2.5 text-lg font-semibold tracking-tight text-ink">
+          <Link
+            href="/"
+            className={`flex items-center gap-2.5 text-lg font-semibold tracking-tight text-ink ${linkFocus}`}
+          >
             <LogoMark />
             AgentPay
-          </span>
+          </Link>
 
           <nav className="hidden items-center justify-center gap-2 text-[15px] font-medium text-ink md:flex">
             <a
