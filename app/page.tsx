@@ -164,6 +164,12 @@ export default function HomePage() {
               Agents
             </a>
             <a
+              href="#faq"
+              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-[#4f8b68] hover:bg-[#4f8b68] hover:text-paper ${linkFocus}`}
+            >
+              FAQ
+            </a>
+            <a
               href="https://github.com/longbds0108/Pay-Agent/blob/main/docs/TECHNICAL_SPEC_v0.1.md"
               target="_blank"
               rel="noreferrer"
@@ -360,8 +366,37 @@ export default function HomePage() {
         </div>
       </section>
 
-      <footer className="border-t border-ink-line px-6 py-8 text-center text-xs text-paper/35 md:px-10">
-        AgentPay — built on Arc.
+      <footer className="border-t border-ink-line px-6 py-10 text-xs text-paper/40 md:px-10">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 md:flex-row md:justify-between">
+          <span>AgentPay — built on Arc.</span>
+          <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            <a href="#policy" className={`transition hover:text-paper ${linkFocus}`}>
+              Product
+            </a>
+            <a href="#pipeline" className={`transition hover:text-paper ${linkFocus}`}>
+              How it works
+            </a>
+            <a href="#faq" className={`transition hover:text-paper ${linkFocus}`}>
+              FAQ
+            </a>
+            <a
+              href="https://github.com/longbds0108/Pay-Agent"
+              target="_blank"
+              rel="noreferrer"
+              className={`transition hover:text-paper ${linkFocus}`}
+            >
+              GitHub
+            </a>
+            <a
+              href="https://github.com/longbds0108/Pay-Agent/blob/main/docs/TECHNICAL_SPEC_v0.1.md"
+              target="_blank"
+              rel="noreferrer"
+              className={`transition hover:text-paper ${linkFocus}`}
+            >
+              Docs
+            </a>
+          </nav>
+        </div>
       </footer>
     </div>
   );
