@@ -104,30 +104,46 @@ export default function HomePage() {
   return (
     <div className={`${plexSans.className} min-h-screen bg-ink text-paper`}>
       <header className="sticky top-0 z-50 border-b border-ink-line/60 bg-ink/75 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 md:px-10">
-          <div className="flex items-center gap-8">
-            <span className="flex items-center gap-2.5 text-lg font-semibold tracking-tight">
-              <span className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-confirmed/50">
-                <span className="h-1.5 w-1.5 rounded-full bg-confirmed" />
-              </span>
-              AgentPay
+        <div className="mx-auto grid max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-4 px-6 py-4 md:px-10">
+          <span className="flex items-center gap-2.5 text-lg font-semibold tracking-tight">
+            <span className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-confirmed/50">
+              <span className="h-1.5 w-1.5 rounded-full bg-confirmed" />
             </span>
-            <nav className="hidden items-center gap-6 text-sm text-paper/55 md:flex">
-              <a href="#pipeline" className={`transition hover:text-paper ${linkFocus}`}>
-                Pipeline
-              </a>
-              <a href="#policy" className={`transition hover:text-paper ${linkFocus}`}>
-                Policy
-              </a>
-              <a href="#network" className={`transition hover:text-paper ${linkFocus}`}>
-                Network
-              </a>
-            </nav>
-          </div>
+            AgentPay
+          </span>
+
+          <nav className="hidden items-center justify-center gap-2 text-xs text-paper/60 md:flex">
+            <a
+              href="#policy"
+              className={`rounded-full border border-ink-line/60 px-4 py-1.5 transition hover:border-paper/40 hover:text-paper ${linkFocus}`}
+            >
+              Product
+            </a>
+            <a
+              href="#pipeline"
+              className={`rounded-full border border-ink-line/60 px-4 py-1.5 transition hover:border-paper/40 hover:text-paper ${linkFocus}`}
+            >
+              How it works
+            </a>
+            <a
+              href="/agent"
+              className={`rounded-full border border-ink-line/60 px-4 py-1.5 transition hover:border-paper/40 hover:text-paper ${linkFocus}`}
+            >
+              Agents
+            </a>
+            <a
+              href="https://github.com/longbds0108/Pay-Agent/blob/main/docs/TECHNICAL_SPEC_v0.1.md"
+              target="_blank"
+              rel="noreferrer"
+              className={`rounded-full border border-ink-line/60 px-4 py-1.5 transition hover:border-paper/40 hover:text-paper ${linkFocus}`}
+            >
+              Docs
+            </a>
+          </nav>
 
           <Link
             href="/login"
-            className={`rounded-full bg-paper px-4 py-2 text-sm font-medium text-ink transition hover:bg-white active:scale-[0.97] ${linkFocus}`}
+            className={`justify-self-end rounded-full bg-paper px-4 py-2 text-sm font-medium text-ink transition hover:bg-white active:scale-[0.97] ${linkFocus}`}
           >
             Launch app
           </Link>
