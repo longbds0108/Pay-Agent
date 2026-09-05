@@ -92,13 +92,24 @@ const PIPELINE_STEPS: { state: string; status: Status; text: string }[] = [
   },
 ];
 
-const ARC_SPECS = [
-  { label: "chain_id", value: "5042002" },
-  { label: "gas_token", value: "USDC — no separate token needed for gas" },
-  { label: "network", value: "testnet" },
-  { label: "wallet_custody", value: "Circle Developer-Controlled Wallets (SCA)" },
-  { label: "explorer", value: "testnet.arcscan.app" },
-];
+const API_REQUEST = `curl -X POST https://your-app.com/api/agent \\
+  -H "Content-Type: application/json" \\
+  -H "Cookie: <session>" \\
+  -d '{"message": "Pay the weather API for today\\'s data"}'`;
+
+const API_RESPONSE = `{
+  "reply": "Paid 0.50 USDC for Weather API (demo).",
+  "intent": {
+    "serviceId": "8f2c...",
+    "recipient": "0x0000...00A1",
+    "amountUsdc": 0.5,
+    "reason": "Weather API (demo)"
+  },
+  "paymentIntentId": "b91e...",
+  "decision": { "decision": "auto_approve", "reason": "Within policy limits" },
+  "txHash": "0x7f3a...e21c",
+  "executionError": null
+}`;
 
 const FAQ_ITEMS = [
   {
@@ -322,15 +333,54 @@ export default function HomePage() {
       {/* Spec sheet Arc */}
       <section id="network" className="scroll-mt-20 bg-paper py-20 text-ink">
         <div className="mx-auto max-w-6xl px-6 md:px-10">
-          <h2 className="text-xs uppercase tracking-[0.16em] text-ink/50">Arc network specs</h2>
-          <dl className={`${plexMono.className} mt-8 max-w-2xl divide-y divide-ink/10 border-y border-ink/10 text-sm`}>
-            {ARC_SPECS.map((spec) => (
-              <div key={spec.label} className="flex flex-col gap-1 py-4 sm:flex-row sm:items-baseline sm:justify-between">
-                <dt className="text-ink/50">{spec.label}</dt>
-                <dd className="text-ink sm:text-right">{spec.value}</dd>
+          <h2 className="text-xs uppercase tracking-[0.16em] text-ink/50">Built for agents to call</h2>
+          <p className="mt-3 max-w-xl text-sm text-ink/60">
+            One endpoint, the full policy engine behind it. Send a message, get back a decision and — if it&rsquo;s
+            within policy — a real transaction hash.
+          </p>
+
+          <div className="mt-8 grid gap-4 lg:grid-cols-2">
+            <div className="min-w-0 overflow-hidden rounded-2xl border border-ink-line bg-ink">
+              <div className="flex items-center gap-1.5 border-b border-ink-line px-4 py-3">
+                <span className="h-2.5 w-2.5 rounded-full bg-denied/60" />
+                <span className="h-2.5 w-2.5 rounded-full bg-pending/60" />
+                <span className="h-2.5 w-2.5 rounded-full bg-confirmed/60" />
+                <span className="ml-2 text-xs uppercase tracking-[0.1em] text-paper/40">request</span>
               </div>
-            ))}
-          </dl>
+              <pre className={`${plexMono.className} overflow-x-auto px-4 py-4 text-[12.5px] leading-relaxed text-paper/80`}>
+                {API_REQUEST}
+              </pre>
+            </div>
+
+            <div className="min-w-0 overflow-hidden rounded-2xl border border-ink-line bg-ink">
+              <div className="flex items-center gap-1.5 border-b border-ink-line px-4 py-3">
+                <span className="h-2.5 w-2.5 rounded-full bg-denied/60" />
+                <span className="h-2.5 w-2.5 rounded-full bg-pending/60" />
+                <span className="h-2.5 w-2.5 rounded-full bg-confirmed/60" />
+                <span className="ml-2 text-xs uppercase tracking-[0.1em] text-paper/40">200 response</span>
+              </div>
+              <pre className={`${plexMono.className} overflow-x-auto px-4 py-4 text-[12.5px] leading-relaxed text-paper/80`}>
+                {API_RESPONSE}
+              </pre>
+            </div>
+          </div>
+
+          <p className="mt-6 text-sm text-ink/50">
+            Same contract the chat UI at{" "}
+            <Link href="/agent" className={`underline decoration-ink/20 underline-offset-2 hover:text-ink ${linkFocus}`}>
+              /agent
+            </Link>{" "}
+            uses — see the full endpoint list in{" "}
+            <a
+              href="https://github.com/longbds0108/Pay-Agent/blob/main/docs/TECHNICAL_SPEC_v0.1.md"
+              target="_blank"
+              rel="noreferrer"
+              className={`underline decoration-ink/20 underline-offset-2 hover:text-ink ${linkFocus}`}
+            >
+              the docs
+            </a>
+            .
+          </p>
         </div>
       </section>
 
