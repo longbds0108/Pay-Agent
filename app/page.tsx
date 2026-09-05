@@ -153,7 +153,14 @@ export default function HomePage() {
       </header>
 
       {/* Hero */}
-      <section className="mx-auto grid max-w-6xl gap-12 px-6 pb-20 pt-8 md:grid-cols-[1.1fr_1fr] md:gap-10 md:px-10 md:pt-16">
+      <div className="relative overflow-hidden">
+        <div className="radar-dial" aria-hidden="true">
+          <span className="radar-ring radar-ring-1" />
+          <span className="radar-ring radar-ring-2" />
+          <span className="radar-ring radar-ring-3" />
+          <span className="radar-sweep" />
+        </div>
+        <section className="relative mx-auto grid max-w-6xl gap-12 px-6 pb-20 pt-8 md:grid-cols-[1.1fr_1fr] md:gap-10 md:px-10 md:pt-16">
         <div>
           <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-ink-line px-3 py-1 text-xs uppercase tracking-[0.16em] text-paper/60">
             Agent wallet on Arc <span className="text-confirmed">·</span> USDC pays the gas
@@ -218,7 +225,8 @@ export default function HomePage() {
             <code className={plexMono.className}>types/index.ts</code>.
           </p>
         </div>
-      </section>
+        </section>
+      </div>
 
       {/* Ba con số của policy */}
       <section id="policy" className="scroll-mt-20 bg-paper py-20 text-ink">
