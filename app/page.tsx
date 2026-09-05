@@ -105,6 +105,29 @@ const ARC_SPECS = [
   { label: "explorer", value: "testnet.arcscan.app" },
 ];
 
+const FAQ_ITEMS = [
+  {
+    q: "Is my money safe?",
+    a: "Yes. Funds sit in a Circle Developer-Controlled Wallet — the agent never holds a private key. Every payment is checked against your policy before anything is sent.",
+  },
+  {
+    q: "Can the agent ever spend more than I allow?",
+    a: "No. Your daily limit, per-transaction limit, and approval threshold are enforced on the server for every single payment intent — not just suggested to the agent as instructions it could ignore.",
+  },
+  {
+    q: "What if the agent makes a mistake?",
+    a: "Every decision is written to an audit log, and every confirmed payment has a real transaction hash on Arcscan. You can tighten or pause your policy at any time from the Policy page.",
+  },
+  {
+    q: "Which wallets are supported?",
+    a: "Sign in with Google to get an auto-created Circle smart account, or connect an existing EVM wallet. Agent auto-pay from external wallets is on the roadmap.",
+  },
+  {
+    q: "What does it cost to run?",
+    a: "Arc uses USDC as its native gas token, so there's no separate token to hold for fees. Some payments also route through Circle Gateway nanopayments for sub-cent, gasless settlement.",
+  },
+];
+
 const linkFocus =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-confirmed";
 
@@ -291,6 +314,28 @@ export default function HomePage() {
               </div>
             ))}
           </dl>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="scroll-mt-20 border-t border-ink/10 bg-paper py-20 text-ink">
+        <div className="mx-auto max-w-3xl px-6 md:px-10">
+          <h2 className="text-xs uppercase tracking-[0.16em] text-ink/50">Frequently asked questions</h2>
+          <div className="mt-8 divide-y divide-ink/10 border-y border-ink/10">
+            {FAQ_ITEMS.map((item) => (
+              <details key={item.q} className="group py-5">
+                <summary
+                  className={`flex cursor-pointer list-none items-center justify-between gap-4 text-base font-medium text-ink ${linkFocus}`}
+                >
+                  {item.q}
+                  <span className="shrink-0 text-xl leading-none text-ink/40 transition-transform duration-200 group-open:rotate-45">
+                    +
+                  </span>
+                </summary>
+                <p className="mt-3 max-w-xl text-sm leading-relaxed text-ink/60">{item.a}</p>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 
