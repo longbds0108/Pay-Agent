@@ -1,0 +1,101 @@
+"use client";
+
+import { useEffect, useState, type FormEvent } from "react";
+
+interface PolicyForm {
+  dailyLimitUsdc: number;
+  perTxLimitUsdc: number;
+  requireApprovalAboveUsdc: number;
+}
+
+const DEFAULT_FORM: PolicyForm = { dailyLimitUsdc: 50, perTxLimitUsdc: 5, requireApprovalAboveUsdc: 5 };
+
+export default function PolicyPage() {
+  const [form, setForm] = useState<PolicyForm>(DEFAULT_FORM);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/policy")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.policy) {
+          setForm({
+            dailyLimitUsdc: data.policy.dailyLimitUsdc,
+            perTxLimitUsdc: data.policy.perTxLimitUsdc,
+            requireApprovalAboveUsdc: data.policy.requireApprovalAboveUsdc,
+          });
+        }
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    setMessage(null);
+
+    const res = await fetch("/api/policy", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+
+    setSaving(false);
+    setMessage(res.ok ? "Đã lưu policy." : "Lưu thất bại, thử lại.");
+  }
+
+  if (loading) {
+    return <main className="mx-auto max-w-lg px-6 py-10 text-slate-500">Đang tải...</main>;
+  }
+
+  return (
+    <main className="mx-auto max-w-lg px-6 py-10">
+      <h1 className="mb-6 text-2xl font-semibold">Spending Policy</h1>
+      <form className="space-y-4" onSubmit={handleSubmit}>
+        <label className="block">
+          <span className="text-sm text-slate-600">Daily limit (USDC)</span>
+          <input
+            type="number"
+            min={0}
+            step="0.01"
+            value={form.dailyLimitUsdc}
+            onChange={(e) => setForm((f) => ({ ...f, dailyLimitUsdc: Number(e.target.value) }))}
+            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+          />
+        </label>
+        <label className="block">
+          <span className="text-sm text-slate-600">Per-transaction limit (USDC)</span>
+          <input
+            type="number"
+            min={0}
+            step="0.01"
+            value={form.perTxLimitUsdc}
+            onChange={(e) => setForm((f) => ({ ...f, perTxLimitUsdc: Number(e.target.value) }))}
+            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+          />
+        </label>
+        <label className="block">
+          <span className="text-sm text-slate-600">Require approval above (USDC)</span>
+          <input
+            type="number"
+            min={0}
+            step="0.01"
+            value={form.requireApprovalAboveUsdc}
+            onChange={(e) => setForm((f) => ({ ...f, requireApprovalAboveUsdc: Number(e.target.value) }))}
+            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+          />
+        </label>
+        <button
+          type="submit"
+          disabled={saving}
+          className="rounded-lg bg-slate-900 px-4 py-2 text-white disabled:opacity-50"
+        >
+          {saving ? "Đang lưu..." : "Save policy"}
+        </button>
+        {message && <p className="text-sm text-slate-600">{message}</p>}
+      </form>
+    </main>
+  );
+}
