@@ -108,8 +108,8 @@
   }
 }
 
-/* Khung ledger "lơ lửng" — bồng bềnh nhẹ liên tục, hover vào thì bồng
-   bềnh mạnh & nhanh hơn kèm phóng to nhẹ. */
+/* Khung ledger "lơ lửng" — nghiêng nhẹ bên phải, bồng bềnh liên tục.
+   Hover vào thì nghiêng nhiều hơn (không zoom). */
 .ledger-float {
   animation: ledger-float 5s ease-in-out infinite;
 }
@@ -121,20 +121,20 @@
 @keyframes ledger-float {
   0%,
   100% {
-    transform: translateY(0);
+    transform: translateY(0) rotate(2deg);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-10px) rotate(2deg);
   }
 }
 
 @keyframes ledger-float-hover {
   0%,
   100% {
-    transform: translateY(-4px) scale(1.015);
+    transform: translateY(-4px) rotate(5deg);
   }
   50% {
-    transform: translateY(-18px) scale(1.015);
+    transform: translateY(-18px) rotate(5deg);
   }
 }
 
