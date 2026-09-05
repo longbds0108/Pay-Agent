@@ -111,22 +111,22 @@ export default function HomePage() {
             AgentPay
           </span>
 
-          <nav className="hidden items-center justify-center gap-2 text-xs text-ink/60 md:flex">
+          <nav className="hidden items-center justify-center gap-2 text-[15px] font-medium text-ink md:flex">
             <a
               href="#policy"
-              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-ink/40 hover:text-ink ${linkFocus}`}
+              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-ink/40 hover:bg-ink/5 ${linkFocus}`}
             >
               Product
             </a>
             <a
               href="#pipeline"
-              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-ink/40 hover:text-ink ${linkFocus}`}
+              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-ink/40 hover:bg-ink/5 ${linkFocus}`}
             >
               How it works
             </a>
             <a
               href="/agent"
-              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-ink/40 hover:text-ink ${linkFocus}`}
+              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-ink/40 hover:bg-ink/5 ${linkFocus}`}
             >
               Agents
             </a>
@@ -134,7 +134,7 @@ export default function HomePage() {
               href="https://github.com/longbds0108/Pay-Agent/blob/main/docs/TECHNICAL_SPEC_v0.1.md"
               target="_blank"
               rel="noreferrer"
-              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-ink/40 hover:text-ink ${linkFocus}`}
+              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-ink/40 hover:bg-ink/5 ${linkFocus}`}
             >
               Docs
             </a>
