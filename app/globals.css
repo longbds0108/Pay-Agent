@@ -22,3 +22,21 @@
     animation: none;
   }
 }
+
+/* Nền "lưới kỹ thuật" cho các section tối trên trang chủ — lưới blueprint
+   mờ + ánh sáng toả phía sau hero, tĩnh (không animate) để không cạnh
+   tranh với dải ledger đang là điểm nhấn động chính của trang. */
+.tech-grid {
+  background-image: radial-gradient(ellipse 900px 520px at 50% 0%, rgba(76, 139, 103, 0.18), transparent 60%),
+    linear-gradient(rgba(237, 231, 217, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(237, 231, 217, 0.06) 1px, transparent 1px);
+  background-repeat: no-repeat, repeat, repeat;
+  background-size:
+    100% 640px,
+    48px 48px,
+    48px 48px;
+  background-position:
+    top center,
+    top left,
+    top left;
+}

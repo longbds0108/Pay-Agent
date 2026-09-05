@@ -103,7 +103,7 @@ const linkFocus =
 
 export default function HomePage() {
   return (
-    <div className={`${plexSans.className} min-h-screen bg-ink text-paper`}>
+    <div className={`${plexSans.className} tech-grid min-h-screen bg-ink text-paper`}>
       <header className="sticky top-0 z-50 border-b border-ink/10 bg-paper/90 backdrop-blur-md">
         <div className="mx-auto grid max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-4 px-6 py-4 md:px-10">
           <Link
