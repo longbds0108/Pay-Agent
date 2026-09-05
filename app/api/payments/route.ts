@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getCurrentAgentContext } from "@/lib/currentAgent";
 import { createAndProcessPaymentIntent } from "@/lib/payments/pipeline";
 import { listPaymentsForAgent } from "@/lib/payments/list";
+import { isSupabaseConfigured } from "@/lib/supabase/server";
 
 const manualIntentSchema = z.object({
   recipient: z.string().min(1),
@@ -11,7 +12,12 @@ const manualIntentSchema = z.object({
   serviceId: z.string().uuid().nullable().optional(),
 });
 
+const NOT_CONFIGURED_RESPONSE = () =>
+  NextResponse.json({ error: "Chưa cấu hình Supabase — xem docs/SETUP.md mục 1." }, { status: 503 });
+
 export async function GET() {
+  if (!isSupabaseConfigured()) return NOT_CONFIGURED_RESPONSE();
+
   const context = await getCurrentAgentContext();
   if (!context) {
     return NextResponse.json({ error: "Chưa đăng nhập hoặc chưa onboard xong." }, { status: 401 });
@@ -22,6 +28,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  if (!isSupabaseConfigured()) return NOT_CONFIGURED_RESPONSE();
+
   const context = await getCurrentAgentContext();
   if (!context) {
     return NextResponse.json({ error: "Chưa đăng nhập hoặc chưa onboard xong." }, { status: 401 });

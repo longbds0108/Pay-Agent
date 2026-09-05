@@ -1,6 +1,15 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
+/**
+ * Dùng để các page/route kiểm tra TRƯỚC khi gọi Supabase, tránh crash cả
+ * trang (Next.js dev overlay 500) khi NEXT_PUBLIC_SUPABASE_URL/ANON_KEY chưa
+ * điền — hiện message hướng dẫn setup thay vì exception thô.
+ */
+export function isSupabaseConfigured(): boolean {
+  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+}
+
 export function createSupabaseServerClient() {
   const cookieStore = cookies();
 

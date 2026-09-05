@@ -5,6 +5,7 @@ import { listServices } from "@/lib/agent/services";
 import { X402_DEMO_RESOURCES } from "@/lib/agent/x402/resources";
 import { getCurrentAgentContext } from "@/lib/currentAgent";
 import { createAndProcessPaymentIntent, createAndProcessX402PaymentIntent } from "@/lib/payments/pipeline";
+import { isSupabaseConfigured } from "@/lib/supabase/server";
 
 /**
  * Nhận tin nhắn của user, để AI model (DeepSeek) hiểu payment intent (dịch
@@ -12,6 +13,10 @@ import { createAndProcessPaymentIntent, createAndProcessX402PaymentIntent } from
  * auto-approve / yêu cầu duyệt / từ chối, và thực thi luôn nếu auto-approve.
  */
 export async function POST(request: Request) {
+  if (!isSupabaseConfigured()) {
+    return NextResponse.json({ error: "Chưa cấu hình Supabase — xem docs/SETUP.md mục 1." }, { status: 503 });
+  }
+
   const body = await request.json().catch(() => ({}));
   const message = body.message;
   const history: AgentChatMessage[] = Array.isArray(body.history) ? body.history : [];

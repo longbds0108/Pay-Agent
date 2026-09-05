@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getCurrentAgentContext } from "@/lib/currentAgent";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient, isSupabaseConfigured } from "@/lib/supabase/server";
 
 const policySchema = z.object({
   dailyLimitUsdc: z.number().positive(),
@@ -9,7 +9,12 @@ const policySchema = z.object({
   requireApprovalAboveUsdc: z.number().nonnegative(),
 });
 
+const NOT_CONFIGURED_RESPONSE = () =>
+  NextResponse.json({ error: "Chưa cấu hình Supabase — xem docs/SETUP.md mục 1." }, { status: 503 });
+
 export async function GET() {
+  if (!isSupabaseConfigured()) return NOT_CONFIGURED_RESPONSE();
+
   const context = await getCurrentAgentContext();
   if (!context) {
     return NextResponse.json({ error: "Chưa đăng nhập hoặc chưa onboard xong." }, { status: 401 });
@@ -19,6 +24,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  if (!isSupabaseConfigured()) return NOT_CONFIGURED_RESPONSE();
+
   const context = await getCurrentAgentContext();
   if (!context) {
     return NextResponse.json({ error: "Chưa đăng nhập hoặc chưa onboard xong." }, { status: 401 });

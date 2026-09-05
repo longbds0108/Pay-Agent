@@ -2,9 +2,13 @@ import { NextResponse } from "next/server";
 import { getCurrentAgentContext } from "@/lib/currentAgent";
 import { executePayment } from "@/lib/payments/execute";
 import { assertTransition } from "@/lib/payments/stateMachine";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient, isSupabaseConfigured } from "@/lib/supabase/server";
 
 export async function POST(_request: Request, { params }: { params: { id: string } }) {
+  if (!isSupabaseConfigured()) {
+    return NextResponse.json({ error: "Chưa cấu hình Supabase — xem docs/SETUP.md mục 1." }, { status: 503 });
+  }
+
   const context = await getCurrentAgentContext();
   if (!context) {
     return NextResponse.json({ error: "Chưa đăng nhập hoặc chưa onboard xong." }, { status: 401 });

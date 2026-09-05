@@ -1,8 +1,12 @@
 import { redirect } from "next/navigation";
+import { SupabaseSetupNotice } from "@/components/SupabaseSetupNotice";
 import { createAgentWalletClient } from "@/lib/circle/agentWallet";
 import { getCurrentAgentContext } from "@/lib/currentAgent";
+import { isSupabaseConfigured } from "@/lib/supabase/server";
 
 export default async function DashboardPage() {
+  if (!isSupabaseConfigured()) return <SupabaseSetupNotice />;
+
   const context = await getCurrentAgentContext();
   if (!context) redirect("/login");
 

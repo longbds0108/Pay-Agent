@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { ensureOnboarded } from "@/lib/onboarding";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient, isSupabaseConfigured } from "@/lib/supabase/server";
 
 /**
  * Gọi từ client ngay sau khi `supabase.auth.signInWithWeb3({chain:'ethereum'})`
@@ -10,6 +10,10 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
  * trước khi có session).
  */
 export async function POST(request: Request) {
+  if (!isSupabaseConfigured()) {
+    return NextResponse.json({ error: "Chưa cấu hình Supabase — xem docs/SETUP.md mục 1." }, { status: 503 });
+  }
+
   const supabase = createSupabaseServerClient();
   const {
     data: { user },

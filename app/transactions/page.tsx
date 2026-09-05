@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
+import { SupabaseSetupNotice } from "@/components/SupabaseSetupNotice";
 import { getCurrentAgentContext } from "@/lib/currentAgent";
 import { listPaymentsForAgent } from "@/lib/payments/list";
+import { isSupabaseConfigured } from "@/lib/supabase/server";
 
 const STATUS_LABEL: Record<string, string> = {
   created: "Đang tạo",
@@ -14,6 +16,8 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 export default async function TransactionsPage() {
+  if (!isSupabaseConfigured()) return <SupabaseSetupNotice />;
+
   const context = await getCurrentAgentContext();
   if (!context) redirect("/login");
 
