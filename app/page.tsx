@@ -114,19 +114,19 @@ export default function HomePage() {
           <nav className="hidden items-center justify-center gap-2 text-[15px] font-medium text-ink md:flex">
             <a
               href="#policy"
-              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-[#c9ff5c] hover:bg-[#c9ff5c] ${linkFocus}`}
+              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-[#4f8b68] hover:bg-[#4f8b68] hover:text-paper ${linkFocus}`}
             >
               Product
             </a>
             <a
               href="#pipeline"
-              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-[#c9ff5c] hover:bg-[#c9ff5c] ${linkFocus}`}
+              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-[#4f8b68] hover:bg-[#4f8b68] hover:text-paper ${linkFocus}`}
             >
               How it works
             </a>
             <a
               href="/agent"
-              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-[#c9ff5c] hover:bg-[#c9ff5c] ${linkFocus}`}
+              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-[#4f8b68] hover:bg-[#4f8b68] hover:text-paper ${linkFocus}`}
             >
               Agents
             </a>
@@ -134,7 +134,7 @@ export default function HomePage() {
               href="https://github.com/longbds0108/Pay-Agent/blob/main/docs/TECHNICAL_SPEC_v0.1.md"
               target="_blank"
               rel="noreferrer"
-              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-[#c9ff5c] hover:bg-[#c9ff5c] ${linkFocus}`}
+              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-[#4f8b68] hover:bg-[#4f8b68] hover:text-paper ${linkFocus}`}
             >
               Docs
             </a>
@@ -142,7 +142,7 @@ export default function HomePage() {
 
           <Link
             href="/login"
-            className={`justify-self-end rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition hover:bg-[#c9ff5c] hover:text-ink active:scale-[0.97] ${linkFocus}`}
+            className={`justify-self-end rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition hover:bg-[#4f8b68] active:scale-[0.97] ${linkFocus}`}
           >
             Launch app
           </Link>
@@ -282,13 +282,13 @@ export default function HomePage() {
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Link
             href="/login"
-            className={`rounded-full bg-paper px-6 py-3 text-sm font-medium text-ink transition hover:bg-[#c9ff5c] active:scale-[0.97] ${linkFocus}`}
+            className={`rounded-full bg-paper px-6 py-3 text-sm font-medium text-ink transition hover:bg-[#4f8b68] hover:text-paper active:scale-[0.97] ${linkFocus}`}
           >
             Launch app
           </Link>
           <Link
             href="/login"
-            className={`rounded-full border border-ink-line px-6 py-3 text-sm text-paper/80 transition hover:border-[#c9ff5c] hover:bg-[#c9ff5c] hover:text-ink ${linkFocus}`}
+            className={`rounded-full border border-ink-line px-6 py-3 text-sm text-paper/80 transition hover:border-[#4f8b68] hover:bg-[#4f8b68] hover:text-paper ${linkFocus}`}
           >
             Connect EVM wallet
           </Link>
