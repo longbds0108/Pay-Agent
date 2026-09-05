@@ -154,10 +154,6 @@ export default function HomePage() {
 
       {/* Hero */}
       <div className="relative overflow-hidden">
-        <div className="radar-dial" aria-hidden="true">
-          <span className="radar-ring" />
-          <span className="radar-sweep" />
-        </div>
         <section className="relative mx-auto grid max-w-6xl gap-12 px-6 pb-20 pt-8 md:grid-cols-[1.1fr_1fr] md:gap-10 md:px-10 md:pt-16">
         <div>
           <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-ink-line px-3 py-1 text-xs uppercase tracking-[0.16em] text-paper/60">
@@ -189,13 +185,20 @@ export default function HomePage() {
         </div>
 
         <div className="min-w-0">
-          <div className="overflow-hidden rounded-2xl border border-ink-line bg-ink-panel">
-            <div className="flex items-center justify-between border-b border-ink-line px-5 py-3">
-              <span className="text-xs uppercase tracking-[0.12em] text-paper/50">
-                payment_intents — ledger
-              </span>
-              <span className="h-1.5 w-1.5 rounded-full bg-confirmed" />
+          <div className="relative">
+            <div className="radar-dial" aria-hidden="true">
+              <span className="radar-ring-outer" />
+              <span className="radar-sweep-outer" />
+              <span className="radar-ring-inner" />
+              <span className="radar-sweep-inner" />
             </div>
+            <div className="relative overflow-hidden rounded-2xl border border-ink-line bg-ink-panel">
+              <div className="flex items-center justify-between border-b border-ink-line px-5 py-3">
+                <span className="text-xs uppercase tracking-[0.12em] text-paper/50">
+                  payment_intents — ledger
+                </span>
+                <span className="h-1.5 w-1.5 rounded-full bg-confirmed" />
+              </div>
             <div className="relative h-[22rem] overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_12%,black_88%,transparent)]">
               <ul className={`${plexMono.className} ledger-track text-[12px] sm:text-[13px]`}>
                 {[...LEDGER_ENTRIES, ...LEDGER_ENTRIES].map((entry, i) => (
@@ -216,6 +219,7 @@ export default function HomePage() {
                   </li>
                 ))}
               </ul>
+            </div>
             </div>
           </div>
           <p className="mt-3 text-xs text-paper/40">
