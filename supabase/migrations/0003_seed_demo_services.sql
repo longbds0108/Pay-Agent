@@ -12,7 +12,9 @@ do $$
 begin
   alter table public.services add constraint services_name_unique unique (name);
 exception
-  when duplicate_object then null;
+  -- Postgres bao loi duplicate_table (42P07, khong phai duplicate_object)
+  -- cho index ngam dinh cua UNIQUE constraint da ton tai san.
+  when duplicate_table or duplicate_object then null;
 end $$;
 
 insert into public.services (name, description, price_usdc, recipient_address)
