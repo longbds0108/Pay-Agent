@@ -142,7 +142,7 @@ export default function HomePage() {
 
           <Link
             href="/login"
-            className={`justify-self-end rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition hover:bg-ink/85 active:scale-[0.97] ${linkFocus}`}
+            className={`justify-self-end rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition hover:bg-[#c9ff5c] hover:text-ink active:scale-[0.97] ${linkFocus}`}
           >
             Launch app
           </Link>
@@ -167,7 +167,7 @@ export default function HomePage() {
           <div className="mt-8 flex flex-wrap items-center gap-5">
             <Link
               href="/login"
-              className={`rounded-full bg-paper px-6 py-3 text-sm font-medium text-ink transition hover:bg-white active:scale-[0.97] ${linkFocus}`}
+              className={`rounded-full bg-paper px-6 py-3 text-sm font-medium text-ink transition hover:bg-[#c9ff5c] active:scale-[0.97] ${linkFocus}`}
             >
               Continue with Google
             </Link>
@@ -288,7 +288,7 @@ export default function HomePage() {
           </Link>
           <Link
             href="/login"
-            className={`rounded-full border border-ink-line px-6 py-3 text-sm text-paper/80 transition hover:border-paper/40 hover:text-paper ${linkFocus}`}
+            className={`rounded-full border border-ink-line px-6 py-3 text-sm text-paper/80 transition hover:border-[#c9ff5c] hover:bg-[#c9ff5c] hover:text-ink ${linkFocus}`}
           >
             Connect EVM wallet
           </Link>
