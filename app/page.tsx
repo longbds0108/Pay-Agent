@@ -50,22 +50,17 @@ const LEDGER_ENTRIES: { time: string; state: string; amount: string; status: Sta
   { time: "10:47:20", state: "rejected", amount: "over limit", status: "denied", badge: "denied" },
 ];
 
-const POLICY_CARDS = [
-  {
-    label: "Daily limit",
-    value: "50",
-    hint: "Maximum total spend per day, in USDC.",
-  },
-  {
-    label: "Per-transaction limit",
-    value: "5",
-    hint: "A single payment can never exceed this amount.",
-  },
-  {
-    label: "Approval required above",
-    value: "5",
-    hint: "Past this threshold, the agent pauses and waits for your approval.",
-  },
+const AUDIT_STATS = [
+  { label: "Total spent", value: "128.40", suffix: "USDC", hint: "Confirmed payments this period." },
+  { label: "Auto-approved", value: "34", suffix: "payments", hint: "Within policy — no wait needed." },
+  { label: "Needed your OK", value: "3", suffix: "payments", hint: "Over the approval threshold." },
+  { label: "Rejected", value: "1", suffix: "payment", hint: "Over a limit — never executed." },
+];
+
+const AUDIT_BY_SERVICE = [
+  { label: "Weather API (demo)", amount: "62.00", count: 24 },
+  { label: "Translate API (demo)", amount: "41.40", count: 12 },
+  { label: "Joke API (demo)", amount: "25.00", count: 8 },
 ];
 
 const PIPELINE_STEPS: { state: string; status: Status; text: string }[] = [
@@ -269,23 +264,39 @@ export default function HomePage() {
       {/* Ba con số của policy */}
       <section id="policy" className="scroll-mt-20 bg-paper py-20 text-ink">
         <div className="mx-auto max-w-6xl px-6 md:px-10">
-          <h2 className="text-xs uppercase tracking-[0.16em] text-ink/50">
-            Three numbers your agent can never cross
-          </h2>
-          <div className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-ink/10 bg-ink/10 sm:grid-cols-3">
-            {POLICY_CARDS.map((card) => (
-              <div key={card.label} className="bg-paper p-8">
-                <p className="text-xs uppercase tracking-[0.08em] text-ink/50">{card.label}</p>
-                <p className={`${plexMono.className} mt-3 text-4xl font-medium`}>
-                  {card.value}
-                  <span className="ml-2 text-base font-normal text-ink/40">USDC</span>
+          <h2 className="text-xs uppercase tracking-[0.16em] text-ink/50">Every dollar, audited</h2>
+          <p className="mt-3 max-w-xl text-sm text-ink/60">
+            Every payment intent is logged with its policy decision — what was spent, on what, and whether it
+            was auto-approved, held for your OK, or rejected.
+          </p>
+          <div className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-ink/10 bg-ink/10 sm:grid-cols-4">
+            {AUDIT_STATS.map((stat) => (
+              <div key={stat.label} className="bg-paper p-6">
+                <p className="text-xs uppercase tracking-[0.08em] text-ink/50">{stat.label}</p>
+                <p className={`${plexMono.className} mt-3 text-3xl font-medium`}>
+                  {stat.value}
+                  <span className="ml-1.5 text-sm font-normal text-ink/40">{stat.suffix}</span>
                 </p>
-                <p className="mt-2 text-sm text-ink/60">{card.hint}</p>
+                <p className="mt-2 text-xs text-ink/50">{stat.hint}</p>
               </div>
             ))}
           </div>
+
+          <div className="mt-6 divide-y divide-ink/10 overflow-hidden rounded-2xl border border-ink/10">
+            {AUDIT_BY_SERVICE.map((row) => (
+              <div key={row.label} className="flex items-center justify-between bg-paper px-6 py-3 text-sm">
+                <span className="text-ink/70">{row.label}</span>
+                <span className={`${plexMono.className} text-ink/50`}>
+                  {row.amount} USDC · {row.count}×
+                </span>
+              </div>
+            ))}
+          </div>
+
           <p className="mt-6 text-sm text-ink/50">
-            Default values — change them anytime on the Policy page after signing in.
+            Illustrative example, matching the real report at{" "}
+            <code className={plexMono.className}>/transactions</code> — change your limits anytime on the Policy
+            page after signing in.
           </p>
         </div>
       </section>
