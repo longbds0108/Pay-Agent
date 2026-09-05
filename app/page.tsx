@@ -155,9 +155,7 @@ export default function HomePage() {
       {/* Hero */}
       <div className="relative overflow-hidden">
         <div className="radar-dial" aria-hidden="true">
-          <span className="radar-ring radar-ring-1" />
-          <span className="radar-ring radar-ring-2" />
-          <span className="radar-ring radar-ring-3" />
+          <span className="radar-ring" />
           <span className="radar-sweep" />
         </div>
         <section className="relative mx-auto grid max-w-6xl gap-12 px-6 pb-20 pt-8 md:grid-cols-[1.1fr_1fr] md:gap-10 md:px-10 md:pt-16">

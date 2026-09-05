@@ -41,48 +41,34 @@
     top left;
 }
 
-/* Radar tròn trang trí phía sau hero — vòng quét thật (conic-gradient quay
-   liên tục) kèm các vòng tầm (range ring), như màn hình sonar/radar. Đặt
-   lệch góc phải, tràn 1 phần ra ngoài để chỉ là kết cấu nền, không giành
-   spotlight với dải ledger. */
+/* Vòng tròn phát sáng xoay liên tục, trang trí phía sau hero — 1 đường
+   viền mảnh (không phải cụm radar nhiều vòng), 1 đoạn cung sáng chạy dọc
+   viền đó như spinner. Đặt lệch góc phải, tràn ra ngoài viewport — chỉ là
+   kết cấu nền, không giành spotlight với dải ledger. */
 .radar-dial {
   position: absolute;
-  top: -120px;
-  right: -160px;
-  width: 560px;
-  height: 560px;
+  top: 40px;
+  right: -120px;
+  width: 420px;
+  height: 420px;
   pointer-events: none;
 }
 
 .radar-ring {
   position: absolute;
   inset: 0;
-  margin: auto;
   border-radius: 9999px;
   border: 1px solid rgba(237, 231, 217, 0.08);
-}
-
-.radar-ring-1 {
-  width: 100%;
-  height: 100%;
-}
-
-.radar-ring-2 {
-  width: 68%;
-  height: 68%;
-}
-
-.radar-ring-3 {
-  width: 36%;
-  height: 36%;
 }
 
 .radar-sweep {
   position: absolute;
   inset: 0;
   border-radius: 9999px;
-  background: conic-gradient(from 0deg, transparent 0deg, rgba(76, 139, 103, 0.4) 14deg, transparent 60deg);
-  animation: radar-spin 5s linear infinite;
+  background: conic-gradient(from 0deg, transparent 0deg, rgba(76, 139, 103, 0.9) 18deg, transparent 70deg, transparent 360deg);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+  animation: radar-spin 4s linear infinite;
 }
 
 @keyframes radar-spin {
