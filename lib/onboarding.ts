@@ -27,7 +27,7 @@ export async function ensureOnboarded(
 ): Promise<OnboardResult> {
   const { data: existingAgent, error: existingAgentError } = await supabase
     .from("agents")
-    .select("id, wallet_id, wallets(address)")
+    .select("id, wallet_id, wallets!agents_wallet_id_fkey(address)")
     .eq("user_id", userId)
     .maybeSingle();
 
