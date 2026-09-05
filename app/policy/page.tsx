@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
+import { AppHeader } from "@/components/AppHeader";
 
 interface PolicyForm {
   dailyLimitUsdc: number;
@@ -47,12 +48,19 @@ export default function PolicyPage() {
   }
 
   if (loading) {
-    return <main className="mx-auto max-w-lg px-6 py-10 text-slate-500">Đang tải...</main>;
+    return (
+      <div className="min-h-screen">
+        <AppHeader />
+        <main className="mx-auto max-w-lg px-6 py-10 text-slate-500">Đang tải...</main>
+      </div>
+    );
   }
 
   return (
-    <main className="mx-auto max-w-lg px-6 py-10">
-      <h1 className="mb-6 text-2xl font-semibold">Spending Policy</h1>
+    <div className="min-h-screen">
+      <AppHeader />
+      <main className="mx-auto max-w-lg px-6 py-10">
+        <h1 className="mb-6 text-2xl font-semibold">Spending Policy</h1>
       <form className="space-y-4" onSubmit={handleSubmit}>
         <label className="block">
           <span className="text-sm text-slate-600">Daily limit (USDC)</span>
@@ -115,6 +123,7 @@ export default function PolicyPage() {
           Coming soon — chưa hoạt động
         </span>
       </div>
-    </main>
+      </main>
+    </div>
   );
 }

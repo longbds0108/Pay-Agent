@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AppHeader } from "@/components/AppHeader";
 
 interface ChatMessage {
   role: "user" | "agent";
@@ -79,8 +80,10 @@ export default function AgentChatPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-lg flex-col px-6 py-10">
-      <h1 className="mb-6 text-2xl font-semibold">Agent</h1>
+    <div className="min-h-screen">
+      <AppHeader />
+      <main className="mx-auto flex max-w-lg flex-col px-6 py-10">
+        <h1 className="mb-6 text-2xl font-semibold">Agent</h1>
       <div className="flex-1 space-y-3 overflow-y-auto">
         {messages.map((m, i) => (
           <div key={i} className={m.role === "user" ? "text-right" : "text-left"}>
@@ -128,6 +131,7 @@ export default function AgentChatPage() {
           {sending ? "..." : "Send"}
         </button>
       </div>
-    </main>
+      </main>
+    </div>
   );
 }
