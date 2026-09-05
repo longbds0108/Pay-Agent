@@ -17,10 +17,17 @@ const plexMono = IBM_Plex_Mono({
 type Status = "neutral" | "confirmed" | "pending" | "denied";
 
 const STATUS_BADGE: Record<Status, string> = {
-  neutral: "bg-paper/10 text-paper/60",
+  neutral: "bg-ink/8 text-ink/50",
   confirmed: "bg-confirmed/15 text-confirmed",
   pending: "bg-pending/15 text-pending",
   denied: "bg-denied/15 text-denied",
+};
+
+const ROW_HIGHLIGHT: Record<Status, string> = {
+  neutral: "",
+  confirmed: "",
+  pending: "",
+  denied: "bg-denied/10",
 };
 
 const STATUS_DOT: Record<Status, string> = {
@@ -192,26 +199,26 @@ export default function HomePage() {
               <span className="radar-ring-inner" />
               <span className="radar-sweep-inner" />
             </div>
-            <div className="ledger-float relative overflow-hidden rounded-2xl border border-ink-line bg-ink-panel shadow-xl shadow-black/20">
-              <div className="flex items-center justify-between border-b border-ink-line bg-paper px-5 py-3">
-                <span className="text-xs uppercase tracking-[0.12em] text-ink/60">
+            <div className="ledger-float relative overflow-hidden rounded-2xl border border-ink/10 bg-paper shadow-xl shadow-black/20">
+              <div className="flex items-center justify-between gap-3 bg-ink px-5 py-3">
+                <span className="flex items-center gap-2 text-xs uppercase tracking-[0.12em] text-paper">
+                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-confirmed" />
                   payment_intents — ledger
                 </span>
-                <span className="h-1.5 w-1.5 rounded-full bg-confirmed" />
               </div>
             <div className="relative h-[22rem] overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_12%,black_88%,transparent)]">
               <ul className={`${plexMono.className} ledger-track text-[12px] sm:text-[13px]`}>
                 {[...LEDGER_ENTRIES, ...LEDGER_ENTRIES].map((entry, i) => (
                   <li
                     key={i}
-                    className="flex items-center justify-between gap-2 whitespace-nowrap border-b border-ink-line/60 px-4 py-3 sm:px-5"
+                    className={`flex items-center justify-between gap-2 whitespace-nowrap border-b border-ink/10 px-4 py-3 sm:px-5 ${ROW_HIGHLIGHT[entry.status]}`}
                   >
                     <div className="flex min-w-0 items-center gap-2 sm:gap-3">
-                      <span className="shrink-0 text-paper/35">{entry.time}</span>
-                      <span className="truncate text-paper/80">{entry.state}</span>
+                      <span className="shrink-0 text-ink/40">{entry.time}</span>
+                      <span className="truncate font-semibold text-ink">{entry.state}</span>
                     </div>
                     <div className="flex shrink-0 items-center gap-2">
-                      <span className="text-paper/45">{entry.amount}</span>
+                      <span className="text-ink/50">{entry.amount}</span>
                       <span className={`rounded-full px-2 py-0.5 text-[11px] ${STATUS_BADGE[entry.status]}`}>
                         {entry.badge}
                       </span>
