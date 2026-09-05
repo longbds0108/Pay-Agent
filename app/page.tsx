@@ -1,5 +1,6 @@
 import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import Link from "next/link";
+import { LogoMark } from "@/components/LogoMark";
 
 const plexSans = IBM_Plex_Sans({
   subsets: ["latin"],
@@ -105,11 +106,9 @@ export default function HomePage() {
     <div className={`${plexSans.className} min-h-screen bg-ink text-paper`}>
       <header className="sticky top-0 z-50 border-b border-ink-line/60 bg-ink/75 backdrop-blur-md">
         <div className="mx-auto grid max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-4 px-6 py-4 md:px-10">
-          <span className="flex items-center gap-2.5 text-lg font-semibold tracking-tight">
-            <span className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-confirmed/50">
-              <span className="h-1.5 w-1.5 rounded-full bg-confirmed" />
-            </span>
-            AgentPay
+          <span className="flex items-center gap-2.5 text-lg font-semibold tracking-tight text-paper/70">
+            <LogoMark />
+            <span className="text-paper">AgentPay</span>
           </span>
 
           <nav className="hidden items-center justify-center gap-2 text-xs text-paper/60 md:flex">
