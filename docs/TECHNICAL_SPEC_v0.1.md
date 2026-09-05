@@ -167,22 +167,46 @@ executing | confirmed | failed`.
 swap, bridge, DeFi phức tạp, autonomous contract execution, Agent-to-Agent
 payment (đã bàn trong chat gốc như "wow factor" cho phase sau).
 
-**Ghi chú tham khảo cho phase 2 — x402 nanopayments (chưa build ở MVP này):**
-mục 3 (tech stack) có ghi "Agent-to-service payment | x402 nanopayments" từ ý
-tưởng gốc, nhưng MVP hiện tại đơn giản hoá: agent chỉ trả tiền cho service đã
-seed sẵn trong bảng `services`, chuyển thẳng USDC qua Circle tới địa chỉ cố
-định (`lib/payments/pipeline.ts`) — không phải giao thức x402 thật. Repo
-[tang-vu/undertow](https://github.com/tang-vu/undertow) (skill trading crypto
-cho CoinMarketCap AI Agent Hub) có 1 demo x402 thật đáng tham khảo khi build
-tính năng này ở phase 2: [`agent_hub/x402_demo.py`](https://github.com/tang-vu/undertow/blob/main/agent_hub/x402_demo.py)
-— agent gọi 1 MCP/API endpoint bất kỳ không cần trả trước, nhận HTTP 402 kèm
-thông tin thanh toán, rồi tự ký `transferWithAuthorization` (EIP-3009, uỷ
-quyền chuyển USDC không cần gas ở phía người ký) để hoàn tất và gọi lại. Muốn
-làm thật ở AgentPay: Circle Developer-Controlled Wallets SDK có sẵn
-`signTypedData` nên có thể dùng Agent Wallet hiện tại để ký EIP-3009 thay vì
-cần thêm ví riêng — khi triển khai, viết thành module riêng
-(`lib/agent/x402.ts` gợi ý) để agent tự "khám phá" và trả phí cho bất kỳ
-service x402 nào, không giới hạn trong danh mục `services` đã seed sẵn.
+**x402 nanopayments (Circle Gateway) — đã build, xem `lib/agent/x402/`:**
+ngoài đường thanh toán trực tiếp (chuyển USDC thẳng tới `recipient_address`
+trong bảng `services`), agent còn có đường thứ hai: trả phí thật qua giao
+thức x402 + Circle Gateway (sub-cent, gasless, gộp nhiều uỷ quyền ký off-chain
+thành 1 lần settle on-chain) — tham khảo repo chính thức của Circle
+[circlefin/arc-nanopayments](https://github.com/circlefin/arc-nanopayments) và
+dùng thẳng SDK `@circle-fin/x402-batching` + `@x402/next` + `@x402/fetch`
+(không tự viết lại phần giao thức/EIP-712).
+
+- Server (bên "bán"): `app/api/x402/weather/route.ts` — endpoint demo, bọc
+  bằng `withX402` (`@x402/next`) + `GatewayEvmScheme`/`BatchFacilitatorClient`
+  (`@circle-fin/x402-batching/server`), trả HTTP 402 kèm payment requirements
+  đúng chuẩn cho tới khi nhận được uỷ quyền hợp lệ.
+- Client (bên "mua" — agent): `lib/agent/x402/payClient.ts` dùng
+  `wrapFetchWithPayment` (`@x402/fetch`) + `registerBatchScheme`
+  (`@circle-fin/x402-batching/client`) để tự dò 402 → ký → gọi lại.
+- **Vẫn giữ nguyên tắc "agent không cầm private key"**: khác với repo tham
+  khảo của Circle (ký bằng private key thô lưu trong `.env`), AgentPay ký uỷ
+  quyền qua `signTypedData` của chính Circle Developer-Controlled Wallets
+  (`lib/circle/agentWallet.ts`) — không có key thô nào rời khỏi Circle. Vì
+  chữ ký từ smart account (SCA) là ERC-1271 còn EIP-3009 thường kỳ vọng chữ
+  ký ECDSA kiểu EOA, mỗi agent có thêm 1 ví EOA riêng
+  (`circle_gateway_eoa` — vẫn do Circle custody) chỉ dùng để ký cho Gateway,
+  tách biệt với smart account chính đang giữ số dư có policy kiểm soát
+  (`lib/agent/x402/gatewayWallet.ts`).
+- Thanh toán x402 vẫn đi qua **đúng một** policy engine như thanh toán trực
+  tiếp (`lib/payments/pipeline.ts` — `runPaymentPipeline` dùng chung, chỉ
+  khác bước `execute`), không có đường vòng nào bỏ qua daily limit/per-tx
+  limit/approval threshold.
+- Danh mục tài nguyên x402 hiện giới hạn trong `lib/agent/x402/resources.ts`
+  (chưa cho agent tự gọi URL bất kỳ do nội dung chat đưa ra) — mở rộng sang
+  "khám phá" service x402 bất kỳ là bước tiếp theo hợp lý nhưng nằm ngoài
+  phạm vi lần build này, để tránh mở mặt an toàn (agent gọi URL tuỳ ý) mà
+  chưa có allowlist/kiểm duyệt.
+- Đã kiểm chứng: chạy `/api/x402/weather` thật, nhận đúng HTTP 402 với
+  payment requirements khớp cấu hình (network, amount, verifyingContract);
+  ký thật qua Circle rồi xác minh chữ ký hợp lệ bằng `viem.verifyTypedData`.
+  Chưa kiểm chứng: vòng thanh toán đầy đủ (deposit vào Gateway rồi settle
+  thật) — cần USDC testnet thật trong ví Gateway (faucet) + Supabase để có
+  agent context, cả hai đều chưa có ở môi trường build này.
 
 ## 9. Repo structure
 

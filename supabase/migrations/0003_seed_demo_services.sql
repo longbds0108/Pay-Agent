@@ -17,18 +17,18 @@ values
     'Weather API (demo)',
     'Du lieu thoi tiet hom nay cho 1 thanh pho. Demo service, khong goi API that.',
     0.50,
-    '0x000000000000000000000000000000000000A1'
+    '0x00000000000000000000000000000000000000A1'
   ),
   (
     'Joke API (demo)',
     'Mot cau joke ngau nhien. Demo service, khong goi API that.',
     0.10,
-    '0x000000000000000000000000000000000000A2'
+    '0x00000000000000000000000000000000000000A2'
   ),
   (
     'Translate API (demo)',
     'Dich mot doan van ban ngan sang tieng Anh. Demo service, khong goi API that.',
     0.25,
-    '0x000000000000000000000000000000000000A3'
+    '0x00000000000000000000000000000000000000A3'
   )
 on conflict (name) do nothing;

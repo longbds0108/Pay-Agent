@@ -1,6 +1,6 @@
 export type LoginMethod = "google" | "evm";
 
-export type WalletType = "circle_smart_account" | "external_evm";
+export type WalletType = "circle_smart_account" | "external_evm" | "circle_gateway_eoa";
 
 export interface Wallet {
   id: string;

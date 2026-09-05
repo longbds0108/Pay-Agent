@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 import type { AgentChatMessage } from "@/lib/agent/deepseek";
 import { runAgentTurn } from "@/lib/agent/deepseek";
 import { listServices } from "@/lib/agent/services";
+import { X402_DEMO_RESOURCES } from "@/lib/agent/x402/resources";
 import { getCurrentAgentContext } from "@/lib/currentAgent";
-import { createAndProcessPaymentIntent } from "@/lib/payments/pipeline";
+import { createAndProcessPaymentIntent, createAndProcessX402PaymentIntent } from "@/lib/payments/pipeline";
 
 /**
  * Nhận tin nhắn của user, để AI model (DeepSeek) hiểu payment intent (dịch
@@ -28,7 +29,24 @@ export async function POST(request: Request) {
   }
 
   const services = await listServices();
-  const turn = await runAgentTurn({ message, history, services });
+  const turn = await runAgentTurn({ message, history, services, x402Resources: X402_DEMO_RESOURCES });
+
+  if (turn.x402Intent) {
+    const resource = X402_DEMO_RESOURCES.find((r) => r.id === turn.x402Intent?.resourceId);
+
+    if (resource) {
+      const result = await createAndProcessX402PaymentIntent({ context, resource });
+
+      return NextResponse.json({
+        reply: turn.reply,
+        intent: { kind: "x402", resourceId: resource.id, amountUsdc: resource.priceUsdc },
+        paymentIntentId: result.paymentIntentId,
+        decision: result.decision,
+        txHash: result.txHash,
+        executionError: result.executionError,
+      });
+    }
+  }
 
   if (!turn.intent) {
     return NextResponse.json({ reply: turn.reply, intent: null });

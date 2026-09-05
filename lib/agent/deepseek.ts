@@ -1,3 +1,4 @@
+import type { X402Resource } from "@/lib/agent/x402/resources";
 import type { Service } from "@/types";
 
 /**
@@ -25,9 +26,15 @@ export interface ProposedPayment {
   reason: string;
 }
 
+export interface ProposedX402Payment {
+  resourceId: string;
+  reason: string;
+}
+
 export interface AgentTurnResult {
   reply: string;
   intent: ProposedPayment | null;
+  x402Intent: ProposedX402Payment | null;
 }
 
 const PROPOSE_PAYMENT_TOOL = {
@@ -47,23 +54,52 @@ const PROPOSE_PAYMENT_TOOL = {
   },
 } as const;
 
-function buildSystemPrompt(services: Service[]): string {
+const PAY_X402_TOOL = {
+  type: "function",
+  function: {
+    name: "pay_x402_resource",
+    description:
+      "Trả phí cho một tài nguyên x402 trong danh mục x402 (thanh toán qua Circle Gateway, mức sub-cent, không tốn gas). Dùng khi user muốn lấy dữ liệu từ chính tài nguyên đó. Chỉ dùng resourceId có trong danh mục x402 ở system prompt.",
+    parameters: {
+      type: "object",
+      properties: {
+        resourceId: { type: "string", description: "id của tài nguyên x402 (đúng như liệt kê)" },
+        reason: { type: "string", description: "Tóm tắt ngắn gọn lý do gọi tài nguyên này" },
+      },
+      required: ["resourceId", "reason"],
+    },
+  },
+} as const;
+
+function buildSystemPrompt(services: Service[], x402Resources: X402Resource[]): string {
   const catalog = services.length
     ? services
         .map((s) => `- serviceId=${s.id} | ${s.name} | giá ${s.priceUsdc} USDC | ${s.description ?? ""}`)
         .join("\n")
     : "(chưa có dịch vụ nào trong danh mục)";
 
+  const x402Catalog = x402Resources.length
+    ? x402Resources
+        .map((r) => `- resourceId=${r.id} | ${r.name} | giá ${r.priceUsdc} USDC | ${r.description}`)
+        .join("\n")
+    : "(chưa có tài nguyên x402 nào)";
+
   return [
     "Bạn là AI agent thanh toán của AgentPay, hoạt động thay mặt user để trả USDC trên mạng Arc.",
-    "Bạn CHỈ được gọi tool propose_payment cho dịch vụ có trong danh mục dưới đây, dùng đúng serviceId và đúng giá niêm yết.",
-    "Không tự đặt giá khác, không đề xuất thanh toán cho dịch vụ ngoài danh mục — nếu user muốn vậy, giải thích là dịch vụ đó chưa được hỗ trợ.",
+    "Có hai cách trả tiền:",
+    "1. propose_payment — chuyển khoản USDC trực tiếp cho dịch vụ trong danh mục dịch vụ.",
+    "2. pay_x402_resource — trả phí cho tài nguyên x402 qua Circle Gateway (nanopayment, sub-cent, không tốn gas).",
+    "Chỉ dùng đúng id có trong danh mục tương ứng và đúng giá niêm yết.",
+    "Không tự đặt giá khác, không đề xuất thanh toán cho thứ ngoài danh mục — nếu user muốn vậy, giải thích là chưa được hỗ trợ.",
     "Nếu yêu cầu của user không rõ ràng, hỏi lại thay vì đoán và gọi tool.",
     "Nếu tin nhắn không liên quan thanh toán, chỉ trò chuyện bình thường, không gọi tool.",
     "Trả lời ngắn gọn, tiếng Việt trừ khi user chủ động dùng ngôn ngữ khác.",
     "",
-    "Danh mục dịch vụ hiện có:",
+    "Danh mục dịch vụ (chuyển khoản trực tiếp):",
     catalog,
+    "",
+    "Danh mục tài nguyên x402 (trả phí qua Circle Gateway):",
+    x402Catalog,
   ].join("\n");
 }
 
@@ -71,19 +107,23 @@ export async function runAgentTurn(params: {
   message: string;
   history: AgentChatMessage[];
   services: Service[];
+  x402Resources?: X402Resource[];
 }): Promise<AgentTurnResult> {
   const apiKey = process.env.DEEPSEEK_API_KEY;
+  const x402Resources = params.x402Resources ?? [];
+
   if (!apiKey) {
     return {
       reply: "AI model chưa được cấu hình (thiếu DEEPSEEK_API_KEY trong .env.local — xem docs/SETUP.md).",
       intent: null,
+      x402Intent: null,
     };
   }
 
   const model = process.env.DEEPSEEK_MODEL || DEFAULT_MODEL;
 
   const messages = [
-    { role: "system", content: buildSystemPrompt(params.services) },
+    { role: "system", content: buildSystemPrompt(params.services, x402Resources) },
     ...params.history.map((m) => ({
       role: m.role === "user" ? ("user" as const) : ("assistant" as const),
       content: m.text,
@@ -100,7 +140,7 @@ export async function runAgentTurn(params: {
     body: JSON.stringify({
       model,
       messages,
-      tools: [PROPOSE_PAYMENT_TOOL],
+      tools: x402Resources.length ? [PROPOSE_PAYMENT_TOOL, PAY_X402_TOOL] : [PROPOSE_PAYMENT_TOOL],
       tool_choice: "auto",
     }),
   });
@@ -114,6 +154,35 @@ export async function runAgentTurn(params: {
   const choice = data?.choices?.[0];
   const message = choice?.message;
   const toolCall = message?.tool_calls?.[0];
+
+  if (toolCall?.function?.name === "pay_x402_resource") {
+    let args: { resourceId?: string; reason?: string } = {};
+    try {
+      args = JSON.parse(toolCall.function.arguments || "{}");
+    } catch {
+      args = {};
+    }
+
+    const resource = x402Resources.find((r) => r.id === args.resourceId);
+    if (resource) {
+      return {
+        reply:
+          message?.content?.trim() ||
+          `Mình sẽ trả ${resource.priceUsdc} USDC qua Circle Gateway để lấy "${resource.name}".`,
+        intent: null,
+        x402Intent: {
+          resourceId: resource.id,
+          reason: args.reason || `Gọi ${resource.name}`,
+        },
+      };
+    }
+
+    return {
+      reply: message?.content?.trim() || "Mình không tìm thấy tài nguyên x402 đó trong danh mục.",
+      intent: null,
+      x402Intent: null,
+    };
+  }
 
   if (toolCall?.function?.name === "propose_payment") {
     let args: { serviceId?: string; reason?: string } = {};
@@ -135,6 +204,7 @@ export async function runAgentTurn(params: {
           amountUsdc: service.priceUsdc,
           reason: args.reason || `Thanh toán cho ${service.name}`,
         },
+        x402Intent: null,
       };
     }
 
@@ -143,11 +213,13 @@ export async function runAgentTurn(params: {
     return {
       reply: message?.content?.trim() || "Mình không tìm thấy dịch vụ đó trong danh mục hiện có.",
       intent: null,
+      x402Intent: null,
     };
   }
 
   return {
     reply: message?.content?.trim() || "Xin lỗi, mình chưa hiểu ý bạn.",
     intent: null,
+    x402Intent: null,
   };
 }

@@ -24,8 +24,8 @@ quan tới phần còn lại của project.)
    - `anon public` key → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
    - `service_role` key → `SUPABASE_SERVICE_ROLE_KEY` (chưa dùng trong code
      MVP, để dành cho tác vụ admin sau này — không commit key này lên git).
-3. Vào **SQL Editor**, chạy lần lượt 4 file trong `supabase/migrations/`
-   theo đúng thứ tự (0001 → 0004). Nếu dùng Supabase CLI thay vì dashboard:
+3. Vào **SQL Editor**, chạy lần lượt 5 file trong `supabase/migrations/`
+   theo đúng thứ tự (0001 → 0005). Nếu dùng Supabase CLI thay vì dashboard:
    ```bash
    supabase link --project-ref <project-ref>
    supabase db push
@@ -91,7 +91,24 @@ quan tới phần còn lại của project.)
    lại tại <https://api-docs.deepseek.com> và sửa `DEEPSEEK_MODEL` tương ứng
    — code không hardcode tên model ngoài giá trị mặc định này.
 
-## 5. Chạy thử
+## 5. x402 nanopayments (Circle Gateway) — tuỳ chọn
+
+Điền thêm 2 giá trị này nếu muốn agent trả phí qua endpoint x402 demo
+(`pay_x402_resource`, xem mục "x402 nanopayments" trong
+`docs/TECHNICAL_SPEC_v0.1.md`):
+
+```
+NEXT_PUBLIC_APP_URL=http://localhost:3000   # đổi thành domain thật khi deploy
+X402_SELLER_ADDRESS=                        # để trống dùng placeholder demo
+```
+
+Ví Gateway (`circle_gateway_eoa`) của mỗi agent được tạo tự động ở lần thanh
+toán x402 đầu tiên — không cần bước setup thủ công riêng. Nếu ví Gateway
+chưa có USDC, agent sẽ tự chuyển một khoản nhỏ từ smart account chính sang
+(qua `sendUsdc`), miễn smart account chính đã có USDC (nạp qua
+faucet.circle.com như mục 6 bên dưới).
+
+## 6. Chạy thử
 
 ```bash
 cp .env.example .env.local   # rồi điền các giá trị ở trên
@@ -112,6 +129,10 @@ Luồng demo đầy đủ:
    - Vượt ngưỡng require-approval nhưng trong daily/per-tx limit → hiện nút
      **Approve/Reject**.
    - Vượt daily/per-tx limit → bị từ chối, kèm lý do.
+5. Muốn thử x402 thật thay vì chuyển khoản trực tiếp: gõ *"Lấy thời tiết qua
+   x402"* — agent gọi `pay_x402_resource`, trả phí 0.001 USDC cho
+   `/api/x402/weather` qua Circle Gateway (không tốn gas, gộp settlement),
+   vẫn qua đúng policy engine như trên.
 5. `/transactions` → xem lịch sử, link sang Arcscan testnet.
 
 ## Giới hạn đã biết ở MVP này

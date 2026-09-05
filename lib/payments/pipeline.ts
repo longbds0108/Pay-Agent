@@ -1,7 +1,8 @@
 import type { CurrentAgentContext } from "@/lib/currentAgent";
 import { getSpentTodayUsdc } from "@/lib/currentAgent";
+import { getX402ResourceUrl, type X402Resource } from "@/lib/agent/x402/resources";
 import { evaluatePaymentIntent } from "@/lib/policy/engine";
-import { executePayment } from "@/lib/payments/execute";
+import { executePayment, executeX402Payment } from "@/lib/payments/execute";
 import { assertTransition } from "@/lib/payments/stateMachine";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { PolicyDecision } from "@/types";
@@ -13,17 +14,26 @@ export interface PipelineResult {
   executionError?: string;
 }
 
+export type ExecuteStep = (paymentIntentId: string) => Promise<
+  { ok: true; txHash: string } | { ok: false; error: string }
+>;
+
 /**
  * Tạo payment intent mới và chạy hết luồng: created -> policy_check ->
  * (rejected | pending_user_approval | approved -> executing -> confirmed/failed).
  * Dùng chung cho cả agent chat (/api/agent) và tạo thủ công (/api/payments).
+ *
+ * `execute` là bước thực thi khi được duyệt — tách ra để thanh toán x402
+ * (qua Circle Gateway) đi qua ĐÚNG một policy engine như chuyển khoản trực
+ * tiếp, thay vì có đường vòng riêng không bị policy kiểm soát.
  */
-export async function createAndProcessPaymentIntent(params: {
+async function runPaymentPipeline(params: {
   context: CurrentAgentContext;
   serviceId: string | null;
   recipient: string;
   amountUsdc: number;
   reason: string;
+  execute: ExecuteStep;
 }): Promise<PipelineResult> {
   const supabase = createSupabaseServerClient();
   const now = () => new Date().toISOString();
@@ -95,15 +105,54 @@ export async function createAndProcessPaymentIntent(params: {
     .update({ status: "approved", updated_at: now() })
     .eq("id", paymentIntentId);
 
-  const execResult = await executePayment({
-    paymentIntentId,
-    wallet: params.context.wallet,
-    recipient: params.recipient,
-    amountUsdc: params.amountUsdc,
-  });
+  const execResult = await params.execute(paymentIntentId);
 
   if (execResult.ok) {
     return { paymentIntentId, decision, txHash: execResult.txHash };
   }
   return { paymentIntentId, decision, executionError: execResult.error };
+}
+
+/** Thanh toán thường: chuyển USDC trực tiếp từ ví agent tới địa chỉ nhận. */
+export async function createAndProcessPaymentIntent(params: {
+  context: CurrentAgentContext;
+  serviceId: string | null;
+  recipient: string;
+  amountUsdc: number;
+  reason: string;
+}): Promise<PipelineResult> {
+  return runPaymentPipeline({
+    ...params,
+    execute: (paymentIntentId) =>
+      executePayment({
+        paymentIntentId,
+        wallet: params.context.wallet,
+        recipient: params.recipient,
+        amountUsdc: params.amountUsdc,
+      }),
+  });
+}
+
+/**
+ * Thanh toán x402: gọi endpoint trả phí qua Circle Gateway (nanopayment,
+ * gasless, gộp settlement). Vẫn qua đúng policy engine ở trên — chỉ khác
+ * bước thực thi.
+ */
+export async function createAndProcessX402PaymentIntent(params: {
+  context: CurrentAgentContext;
+  resource: X402Resource;
+}): Promise<PipelineResult> {
+  return runPaymentPipeline({
+    context: params.context,
+    serviceId: null,
+    recipient: getX402ResourceUrl(params.resource),
+    amountUsdc: params.resource.priceUsdc,
+    reason: `x402 · ${params.resource.name}`,
+    execute: (paymentIntentId) =>
+      executeX402Payment({
+        paymentIntentId,
+        context: params.context,
+        resource: params.resource,
+      }),
+  });
 }
