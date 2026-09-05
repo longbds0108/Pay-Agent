@@ -169,7 +169,7 @@ export default function HomePage() {
               href="/login"
               className={`rounded-full bg-paper px-6 py-3 text-sm font-medium text-ink transition hover:bg-[#c9ff5c] active:scale-[0.97] ${linkFocus}`}
             >
-              Continue with Google
+              Launch app
             </Link>
             <a
               href="#pipeline"
@@ -282,9 +282,9 @@ export default function HomePage() {
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Link
             href="/login"
-            className={`rounded-full bg-paper px-6 py-3 text-sm font-medium text-ink transition hover:bg-white active:scale-[0.97] ${linkFocus}`}
+            className={`rounded-full bg-paper px-6 py-3 text-sm font-medium text-ink transition hover:bg-[#c9ff5c] active:scale-[0.97] ${linkFocus}`}
           >
-            Continue with Google
+            Launch app
           </Link>
           <Link
             href="/login"
