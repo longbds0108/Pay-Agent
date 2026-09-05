@@ -103,16 +103,35 @@ const linkFocus =
 export default function HomePage() {
   return (
     <div className={`${plexSans.className} min-h-screen bg-ink text-paper`}>
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6 md:px-10">
-        <span className="text-lg font-semibold tracking-tight">
-          AgentPay<span className="text-confirmed">·</span>
-        </span>
-        <Link
-          href="/login"
-          className={`rounded-full border border-ink-line px-4 py-2 text-sm text-paper/80 transition hover:border-paper/40 hover:text-paper ${linkFocus}`}
-        >
-          Get started
-        </Link>
+      <header className="sticky top-0 z-50 border-b border-ink-line/60 bg-ink/75 backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 md:px-10">
+          <div className="flex items-center gap-8">
+            <span className="flex items-center gap-2.5 text-lg font-semibold tracking-tight">
+              <span className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-confirmed/50">
+                <span className="h-1.5 w-1.5 rounded-full bg-confirmed" />
+              </span>
+              AgentPay
+            </span>
+            <nav className="hidden items-center gap-6 text-sm text-paper/55 md:flex">
+              <a href="#pipeline" className={`transition hover:text-paper ${linkFocus}`}>
+                Pipeline
+              </a>
+              <a href="#policy" className={`transition hover:text-paper ${linkFocus}`}>
+                Policy
+              </a>
+              <a href="#network" className={`transition hover:text-paper ${linkFocus}`}>
+                Network
+              </a>
+            </nav>
+          </div>
+
+          <Link
+            href="/login"
+            className={`rounded-full bg-paper px-4 py-2 text-sm font-medium text-ink transition hover:bg-white active:scale-[0.97] ${linkFocus}`}
+          >
+            Launch app
+          </Link>
+        </div>
       </header>
 
       {/* Hero */}
@@ -184,7 +203,7 @@ export default function HomePage() {
       </section>
 
       {/* Ba con số của policy */}
-      <section className="bg-paper py-20 text-ink">
+      <section id="policy" className="scroll-mt-20 bg-paper py-20 text-ink">
         <div className="mx-auto max-w-6xl px-6 md:px-10">
           <h2 className="text-xs uppercase tracking-[0.16em] text-ink/50">
             Three numbers your agent can never cross
@@ -208,7 +227,7 @@ export default function HomePage() {
       </section>
 
       {/* State machine */}
-      <section id="pipeline" className="mx-auto max-w-6xl px-6 py-20 md:px-10">
+      <section id="pipeline" className="scroll-mt-20 mx-auto max-w-6xl px-6 py-20 md:px-10">
         <h2 className="text-xs uppercase tracking-[0.16em] text-paper/50">
           What a payment goes through
         </h2>
@@ -226,7 +245,7 @@ export default function HomePage() {
       </section>
 
       {/* Spec sheet Arc */}
-      <section className="bg-paper py-20 text-ink">
+      <section id="network" className="scroll-mt-20 bg-paper py-20 text-ink">
         <div className="mx-auto max-w-6xl px-6 md:px-10">
           <h2 className="text-xs uppercase tracking-[0.16em] text-ink/50">Arc network specs</h2>
           <dl className={`${plexMono.className} mt-8 max-w-2xl divide-y divide-ink/10 border-y border-ink/10 text-sm`}>
