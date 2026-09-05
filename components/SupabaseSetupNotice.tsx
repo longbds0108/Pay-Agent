@@ -6,7 +6,7 @@ export function SupabaseSetupNotice() {
         <p className="font-semibold">Chưa cấu hình Supabase</p>
         <p className="mt-2">
           Trang này cần <code className="rounded bg-amber-100 px-1">NEXT_PUBLIC_SUPABASE_URL</code> và{" "}
-          <code className="rounded bg-amber-100 px-1">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> trong{" "}
+          <code className="rounded bg-amber-100 px-1">NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY</code> trong{" "}
           <code className="rounded bg-amber-100 px-1">.env.local</code> — xem mục 1 trong{" "}
           <code className="rounded bg-amber-100 px-1">docs/SETUP.md</code>.
         </p>

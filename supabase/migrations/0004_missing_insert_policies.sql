@@ -5,14 +5,17 @@
 -- audit log / transaction sau khi thuc thi thanh toan. Them cac policy INSERT
 -- con thieu, giu nguyen nguyen tac "user chi thao tac tren du lieu cua chinh minh".
 
+drop policy if exists "users can insert own row" on public.users;
 create policy "users can insert own row" on public.users
   for insert with check (auth.uid() = id);
 
+drop policy if exists "users can insert own audit log" on public.audit_log;
 create policy "users can insert own audit log" on public.audit_log
   for insert with check (
     agent_id in (select id from public.agents where user_id = auth.uid())
   );
 
+drop policy if exists "users can insert own transactions" on public.transactions;
 create policy "users can insert own transactions" on public.transactions
   for insert with check (
     payment_intent_id in (

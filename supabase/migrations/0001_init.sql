@@ -91,25 +91,31 @@ alter table public.payment_intents enable row level security;
 alter table public.transactions enable row level security;
 alter table public.audit_log enable row level security;
 
+drop policy if exists "users can view own row" on public.users;
 create policy "users can view own row" on public.users
   for select using (auth.uid() = id);
 
+drop policy if exists "users can manage own wallets" on public.wallets;
 create policy "users can manage own wallets" on public.wallets
   for all using (auth.uid() = user_id);
 
+drop policy if exists "users can manage own agents" on public.agents;
 create policy "users can manage own agents" on public.agents
   for all using (auth.uid() = user_id);
 
+drop policy if exists "users can manage own agent policy" on public.spending_policies;
 create policy "users can manage own agent policy" on public.spending_policies
   for all using (
     agent_id in (select id from public.agents where user_id = auth.uid())
   );
 
+drop policy if exists "users can view own payment intents" on public.payment_intents;
 create policy "users can view own payment intents" on public.payment_intents
   for all using (
     agent_id in (select id from public.agents where user_id = auth.uid())
   );
 
+drop policy if exists "users can view own transactions" on public.transactions;
 create policy "users can view own transactions" on public.transactions
   for select using (
     payment_intent_id in (
@@ -118,6 +124,7 @@ create policy "users can view own transactions" on public.transactions
     )
   );
 
+drop policy if exists "users can view own audit log" on public.audit_log;
 create policy "users can view own audit log" on public.audit_log
   for select using (
     agent_id in (select id from public.agents where user_id = auth.uid())

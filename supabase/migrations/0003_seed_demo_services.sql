@@ -8,8 +8,12 @@
 -- chua co tai khoan Circle/Supabase that va chua chon dich vu that cu the.
 -- Neu muon dung dich vu that, sua/xoa cac dong insert ben duoi.
 
-alter table public.services
-  add constraint services_name_unique unique (name);
+do $$
+begin
+  alter table public.services add constraint services_name_unique unique (name);
+exception
+  when duplicate_object then null;
+end $$;
 
 insert into public.services (name, description, price_usdc, recipient_address)
 values

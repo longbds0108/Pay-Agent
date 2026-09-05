@@ -21,7 +21,7 @@ quan tới phần còn lại của project.)
 1. Tạo project tại <https://supabase.com/dashboard> (chọn region gần bạn).
 2. Vào **Project Settings > API**, copy 3 giá trị vào `.env.local`:
    - `Project URL` → `NEXT_PUBLIC_SUPABASE_URL`
-   - `anon public` key → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `anon public` key → `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
    - `service_role` key → `SUPABASE_SERVICE_ROLE_KEY` (chưa dùng trong code
      MVP, để dành cho tác vụ admin sau này — không commit key này lên git).
 3. Vào **SQL Editor**, chạy lần lượt 5 file trong `supabase/migrations/`

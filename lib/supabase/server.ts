@@ -3,11 +3,11 @@ import { cookies } from "next/headers";
 
 /**
  * Dùng để các page/route kiểm tra TRƯỚC khi gọi Supabase, tránh crash cả
- * trang (Next.js dev overlay 500) khi NEXT_PUBLIC_SUPABASE_URL/ANON_KEY chưa
- * điền — hiện message hướng dẫn setup thay vì exception thô.
+ * trang (Next.js dev overlay 500) khi NEXT_PUBLIC_SUPABASE_URL/PUBLISHABLE_KEY
+ * chưa điền — hiện message hướng dẫn setup thay vì exception thô.
  */
 export function isSupabaseConfigured(): boolean {
-  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
 }
 
 export function createSupabaseServerClient() {
@@ -15,7 +15,7 @@ export function createSupabaseServerClient() {
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
       cookies: {
         getAll() {

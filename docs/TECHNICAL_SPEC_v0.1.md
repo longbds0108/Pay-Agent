@@ -264,7 +264,7 @@ code) — xem hướng dẫn từng bước ở `docs/SETUP.md`:
 
 - Tạo project Supabase, chạy 4 migration, bật Google + Web3 Wallet provider
   trong Supabase Auth, điền `NEXT_PUBLIC_SUPABASE_URL` /
-  `NEXT_PUBLIC_SUPABASE_ANON_KEY` / `SUPABASE_SERVICE_ROLE_KEY`.
+  `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` / `SUPABASE_SERVICE_ROLE_KEY`.
 - Đăng ký Google OAuth client (Google Cloud Console), cấu hình provider
   trong Supabase Auth.
 - Đăng ký Circle Developer account, lấy `CIRCLE_API_KEY`, chạy
