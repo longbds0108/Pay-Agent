@@ -10,7 +10,7 @@ export function LogoMark() {
         <path
           d="M7 6 L13 12 L7 18"
           fill="none"
-          stroke="#EDE7D9"
+          stroke="currentColor"
           strokeWidth="2.2"
           strokeLinecap="round"
           strokeLinejoin="round"

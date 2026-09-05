@@ -104,29 +104,29 @@ const linkFocus =
 export default function HomePage() {
   return (
     <div className={`${plexSans.className} min-h-screen bg-ink text-paper`}>
-      <header className="sticky top-0 z-50 border-b border-ink-line/60 bg-ink/75 backdrop-blur-md">
+      <header className="sticky top-0 z-50 border-b border-ink/10 bg-paper/90 backdrop-blur-md">
         <div className="mx-auto grid max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-4 px-6 py-4 md:px-10">
-          <span className="flex items-center gap-2.5 text-lg font-semibold tracking-tight text-paper/70">
+          <span className="flex items-center gap-2.5 text-lg font-semibold tracking-tight text-ink">
             <LogoMark />
-            <span className="text-paper">AgentPay</span>
+            AgentPay
           </span>
 
-          <nav className="hidden items-center justify-center gap-2 text-xs text-paper/60 md:flex">
+          <nav className="hidden items-center justify-center gap-2 text-xs text-ink/60 md:flex">
             <a
               href="#policy"
-              className={`rounded-full border border-ink-line/60 px-4 py-1.5 transition hover:border-paper/40 hover:text-paper ${linkFocus}`}
+              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-ink/40 hover:text-ink ${linkFocus}`}
             >
               Product
             </a>
             <a
               href="#pipeline"
-              className={`rounded-full border border-ink-line/60 px-4 py-1.5 transition hover:border-paper/40 hover:text-paper ${linkFocus}`}
+              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-ink/40 hover:text-ink ${linkFocus}`}
             >
               How it works
             </a>
             <a
               href="/agent"
-              className={`rounded-full border border-ink-line/60 px-4 py-1.5 transition hover:border-paper/40 hover:text-paper ${linkFocus}`}
+              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-ink/40 hover:text-ink ${linkFocus}`}
             >
               Agents
             </a>
@@ -134,7 +134,7 @@ export default function HomePage() {
               href="https://github.com/longbds0108/Pay-Agent/blob/main/docs/TECHNICAL_SPEC_v0.1.md"
               target="_blank"
               rel="noreferrer"
-              className={`rounded-full border border-ink-line/60 px-4 py-1.5 transition hover:border-paper/40 hover:text-paper ${linkFocus}`}
+              className={`rounded-full border border-ink/15 px-4 py-1.5 transition hover:border-ink/40 hover:text-ink ${linkFocus}`}
             >
               Docs
             </a>
@@ -142,7 +142,7 @@ export default function HomePage() {
 
           <Link
             href="/login"
-            className={`justify-self-end rounded-full bg-paper px-4 py-2 text-sm font-medium text-ink transition hover:bg-white active:scale-[0.97] ${linkFocus}`}
+            className={`justify-self-end rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition hover:bg-ink/85 active:scale-[0.97] ${linkFocus}`}
           >
             Launch app
           </Link>
