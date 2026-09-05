@@ -192,7 +192,7 @@ export default function HomePage() {
               <span className="radar-ring-inner" />
               <span className="radar-sweep-inner" />
             </div>
-            <div className="relative overflow-hidden rounded-2xl border border-ink-line bg-ink-panel">
+            <div className="ledger-float relative overflow-hidden rounded-2xl border border-ink-line bg-ink-panel shadow-xl shadow-black/20">
               <div className="flex items-center justify-between border-b border-ink-line px-5 py-3">
                 <span className="text-xs uppercase tracking-[0.12em] text-paper/50">
                   payment_intents — ledger
