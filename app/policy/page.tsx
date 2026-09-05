@@ -96,6 +96,25 @@ export default function PolicyPage() {
         </button>
         {message && <p className="text-sm text-slate-600">{message}</p>}
       </form>
+
+      <div className="mt-8 rounded-lg border border-dashed border-slate-300 p-4 opacity-70">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-slate-700">Tự động sinh lãi từ USDC nhàn rỗi</p>
+            <p className="mt-1 text-xs text-slate-500">
+              Số USDC agent chưa dùng tới hạn mức sẽ tự động gửi vào các protocol DeFi uy tín (Aave, Curve) để
+              sinh lãi, rút lại đúng lúc agent cần chi.
+            </p>
+          </div>
+          <label className="inline-flex shrink-0 cursor-not-allowed items-center">
+            <input type="checkbox" disabled className="peer sr-only" />
+            <span className="relative block h-6 w-11 rounded-full bg-slate-200 after:absolute after:left-0.5 after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:content-['']" />
+          </label>
+        </div>
+        <span className="mt-3 inline-block rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">
+          Coming soon — chưa hoạt động
+        </span>
+      </div>
     </main>
   );
 }

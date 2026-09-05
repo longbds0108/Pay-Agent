@@ -24,8 +24,8 @@ quan tới phần còn lại của project.)
    - `anon public` key → `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
    - `service_role` key → `SUPABASE_SERVICE_ROLE_KEY` (chưa dùng trong code
      MVP, để dành cho tác vụ admin sau này — không commit key này lên git).
-3. Vào **SQL Editor**, chạy lần lượt 5 file trong `supabase/migrations/`
-   theo đúng thứ tự (0001 → 0005). Nếu dùng Supabase CLI thay vì dashboard:
+3. Vào **SQL Editor**, chạy lần lượt 6 file trong `supabase/migrations/`
+   theo đúng thứ tự (0001 → 0006). Nếu dùng Supabase CLI thay vì dashboard:
    ```bash
    supabase link --project-ref <project-ref>
    supabase db push

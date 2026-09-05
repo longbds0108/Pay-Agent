@@ -167,6 +167,27 @@ executing | confirmed | failed`.
 swap, bridge, DeFi phức tạp, autonomous contract execution, Agent-to-Agent
 payment (đã bàn trong chat gốc như "wow factor" cho phase sau).
 
+**Audit Log & Spend Report — đã build, xem `lib/payments/audit.ts` +
+`/transactions`:** gộp `payment_intents` + `audit_log` + `services` thành 1
+báo cáo: tổng đã chi, số lần tự động duyệt/cần duyệt/từ chối, chi tiêu theo
+từng service/recipient, và quyết định policy cuối cùng cho mỗi payment
+intent (kèm lý do). Không cần bảng mới — dữ liệu đã có sẵn từ MVP gốc.
+
+**Gas abstraction bằng USDC:** đã đúng sẵn, không cần code thêm — Arc dùng
+USDC làm gas token gốc (`lib/arc/chain.ts`, mục Arc network specs ở trang
+chủ), agent không cần giữ token native riêng để trả phí.
+
+**Idle Fund Yielding (gửi USDC nhàn rỗi vào Aave/Curve để sinh lãi) — CHƯA
+build, chỉ có UI "Coming soon" ở `/policy` + cột `spending_policies.yield_enabled`
+(migration 0006, luôn `false`):** tra cứu ngày 2026-09-05 cho thấy Aave/Curve
+mới đang thử nghiệm trên Arc testnet, còn Aave V4 trên Arc mainnet vẫn ở
+bước đề xuất governance (Temp Check), chưa được duyệt — Arc mainnet cũng
+chưa ra mắt (dự kiến 16/9/2026). Chưa có địa chỉ contract nào xác nhận ổn
+định trên Arc testnet để tích hợp an toàn, nên chưa nối logic thật — tránh
+build một luồng DeFi giả (không thật sự sinh lãi) hoặc gọi vào contract
+chưa chắc tồn tại. Khi Arc/Aave trưởng thành hơn, nối thật vào đúng cột đã
+chuẩn bị sẵn.
+
 **x402 nanopayments (Circle Gateway) — đã build, xem `lib/agent/x402/`:**
 ngoài đường thanh toán trực tiếp (chuyển USDC thẳng tới `recipient_address`
 trong bảng `services`), agent còn có đường thứ hai: trả phí thật qua giao
