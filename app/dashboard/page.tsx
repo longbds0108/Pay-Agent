@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { AppHeader } from "@/components/AppHeader";
+import { AppSidebar } from "@/components/AppSidebar";
 import { SupabaseSetupNotice } from "@/components/SupabaseSetupNotice";
 import { createAgentWalletClient } from "@/lib/circle/agentWallet";
 import { getCurrentAgentContext } from "@/lib/currentAgent";
@@ -43,10 +43,11 @@ export default async function DashboardPage() {
   const recentRows = report.rows.slice(0, 4);
 
   return (
-    <div className="min-h-screen bg-ink text-paper">
-      <AppHeader />
+    <div className="flex min-h-screen flex-col bg-ink text-paper md:flex-row">
+      <AppSidebar />
 
-      <main className="mx-auto max-w-4xl px-6 py-10">
+      <main className="min-w-0 flex-1 px-6 py-10 lg:px-10">
+        <div className="mx-auto max-w-3xl">
         <h1 className="text-2xl font-semibold">Agent Wallet</h1>
         <p className="mt-1 text-sm text-paper/50">Your agent&rsquo;s wallet, capped by the policy you set.</p>
 
@@ -142,6 +143,7 @@ export default async function DashboardPage() {
               ))}
             </ul>
           )}
+        </div>
         </div>
       </main>
     </div>

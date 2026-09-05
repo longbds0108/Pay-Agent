@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { AppHeader } from "@/components/AppHeader";
+import { AppSidebar } from "@/components/AppSidebar";
 import { SupabaseSetupNotice } from "@/components/SupabaseSetupNotice";
 import { getCurrentAgentContext } from "@/lib/currentAgent";
 import { getAuditReport } from "@/lib/payments/audit";
@@ -33,9 +33,9 @@ export default async function TransactionsPage() {
   const report = await getAuditReport(context.agentId);
 
   return (
-    <div className="min-h-screen">
-      <AppHeader />
-      <main className="mx-auto max-w-3xl px-6 py-10">
+    <div className="flex min-h-screen flex-col md:flex-row">
+      <AppSidebar />
+      <main className="mx-auto w-full max-w-3xl px-6 py-10">
       <h1 className="text-2xl font-semibold">Audit Log & Spend Report</h1>
       <p className="mt-1 text-sm text-slate-500">
         Agent đã dùng bao nhiêu tiền, cho gì, và có tuân thủ policy hay không — minh bạch từng khoản.

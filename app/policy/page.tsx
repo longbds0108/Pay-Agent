@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { AppHeader } from "@/components/AppHeader";
+import { AppSidebar } from "@/components/AppSidebar";
 
 interface PolicyForm {
   dailyLimitUsdc: number;
@@ -49,17 +49,17 @@ export default function PolicyPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen">
-        <AppHeader />
+      <div className="flex min-h-screen flex-col md:flex-row">
+        <AppSidebar />
         <main className="mx-auto max-w-lg px-6 py-10 text-slate-500">Đang tải...</main>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen">
-      <AppHeader />
-      <main className="mx-auto max-w-lg px-6 py-10">
+    <div className="flex min-h-screen flex-col md:flex-row">
+      <AppSidebar />
+      <main className="mx-auto w-full max-w-lg px-6 py-10">
         <h1 className="mb-6 text-2xl font-semibold">Spending Policy</h1>
       <form className="space-y-4" onSubmit={handleSubmit}>
         <label className="block">
